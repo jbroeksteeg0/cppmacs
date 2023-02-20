@@ -1,0 +1,50 @@
+[
+  {
+    "directory": "/home/joshua/cppmacs/build",
+    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -O0 -g -fPIC -MD -MQ libcppmacs.a.p/src_backend_CppMacs.cpp.o -MF libcppmacs.a.p/src_backend_CppMacs.cpp.o.d -o libcppmacs.a.p/src_backend_CppMacs.cpp.o -c ../src/backend/CppMacs.cpp",
+    "file": "../src/backend/CppMacs.cpp",
+    "output": "libcppmacs.a.p/src_backend_CppMacs.cpp.o"
+  },
+  {
+    "directory": "/home/joshua/cppmacs/build",
+    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -O0 -g -fPIC -MD -MQ libcppmacs.a.p/src_misc_Tests.cpp.o -MF libcppmacs.a.p/src_misc_Tests.cpp.o.d -o libcppmacs.a.p/src_misc_Tests.cpp.o -c ../src/misc/Tests.cpp",
+    "file": "../src/misc/Tests.cpp",
+    "output": "libcppmacs.a.p/src_misc_Tests.cpp.o"
+  },
+  {
+    "directory": "/home/joshua/cppmacs/build",
+    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -O0 -g -fPIC -MD -MQ libcppmacs.a.p/src_misc_Logger.cpp.o -MF libcppmacs.a.p/src_misc_Logger.cpp.o.d -o libcppmacs.a.p/src_misc_Logger.cpp.o -c ../src/misc/Logger.cpp",
+    "file": "../src/misc/Logger.cpp",
+    "output": "libcppmacs.a.p/src_misc_Logger.cpp.o"
+  },
+  {
+    "directory": "/home/joshua/cppmacs/build",
+    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -O0 -g -fPIC -MD -MQ libcppmacs.a.p/src_misc_Util.cpp.o -MF libcppmacs.a.p/src_misc_Util.cpp.o.d -o libcppmacs.a.p/src_misc_Util.cpp.o -c ../src/misc/Util.cpp",
+    "file": "../src/misc/Util.cpp",
+    "output": "libcppmacs.a.p/src_misc_Util.cpp.o"
+  },
+  {
+    "directory": "/home/joshua/cppmacs/build",
+    "command": "c++ -Icppmacs.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -O0 -g -MD -MQ cppmacs.p/src_frontend_Entry.cpp.o -MF cppmacs.p/src_frontend_Entry.cpp.o.d -o cppmacs.p/src_frontend_Entry.cpp.o -c ../src/frontend/Entry.cpp",
+    "file": "../src/frontend/Entry.cpp",
+    "output": "cppmacs.p/src_frontend_Entry.cpp.o"
+  },
+  {
+    "directory": "/home/joshua/cppmacs/build",
+    "command": "c++ -Icppmacs.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -O0 -g -MD -MQ cppmacs.p/src_misc_Tests.cpp.o -MF cppmacs.p/src_misc_Tests.cpp.o.d -o cppmacs.p/src_misc_Tests.cpp.o -c ../src/misc/Tests.cpp",
+    "file": "../src/misc/Tests.cpp",
+    "output": "cppmacs.p/src_misc_Tests.cpp.o"
+  },
+  {
+    "directory": "/home/joshua/cppmacs/build",
+    "command": "c++ -Icppmacs.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -O0 -g -MD -MQ cppmacs.p/src_misc_Logger.cpp.o -MF cppmacs.p/src_misc_Logger.cpp.o.d -o cppmacs.p/src_misc_Logger.cpp.o -c ../src/misc/Logger.cpp",
+    "file": "../src/misc/Logger.cpp",
+    "output": "cppmacs.p/src_misc_Logger.cpp.o"
+  },
+  {
+    "directory": "/home/joshua/cppmacs/build",
+    "command": "c++ -Icppmacs.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -O0 -g -MD -MQ cppmacs.p/src_misc_Util.cpp.o -MF cppmacs.p/src_misc_Util.cpp.o.d -o cppmacs.p/src_misc_Util.cpp.o -c ../src/misc/Util.cpp",
+    "file": "../src/misc/Util.cpp",
+    "output": "cppmacs.p/src_misc_Util.cpp.o"
+  }
+]
