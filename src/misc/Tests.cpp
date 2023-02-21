@@ -1,6 +1,5 @@
 #include "Tests.h"
 #include <chrono>
-#include <fmt/format.h>
 #include <iostream>
 
 #include "../backend/Rope.h"

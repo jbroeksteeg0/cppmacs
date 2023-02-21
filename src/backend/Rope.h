@@ -3,7 +3,6 @@
 #include "../misc/Tests.h"
 #include "../misc/Util.h"
 #include <algorithm>
-#include <gsl/gsl>
 #include <iostream>
 #include <memory>
 #include <optional>
@@ -101,12 +100,12 @@ public:
   size_t size() const { return (size_t)m_size; }
 
   struct Iterator {
-    Iterator& operator++() {
+    Iterator &operator++() {
       ASSERT(current != nullptr, "Cannot increment nullptr");
       current = current->succ;
       return *this;
     }
-    Iterator& operator--() {
+    Iterator &operator--() {
       ASSERT(current != nullptr, "Cannot decrement nullptr");
       current = current->prev;
       return *this;
@@ -131,12 +130,12 @@ public:
     friend class Rope;
   };
 
-  Iterator begin() {
+  Iterator begin() const {
     if (m_root == nullptr)
       return nullptr;
     return find_node_pointer(&m_root, 0);
   }
-  Iterator end() { return Iterator(nullptr); }
+  Iterator end() const { return Iterator(nullptr); }
 
 private:
   std::shared_ptr<Node> m_root = nullptr;
@@ -173,7 +172,7 @@ private:
   }
 
   // Pass in parent's ptr
-  Node *find_node_pointer(std::shared_ptr<Node> *node, int index) {
+  Node *find_node_pointer(const std::shared_ptr<Node> *node, int index) const {
     ASSERT(index < m_size, "find index cannot be out of bounds");
     std::shared_ptr<Node> curr = *node;
     int on_left = curr->left == nullptr ? 0 : curr->left->size;
@@ -202,6 +201,11 @@ private:
       oldX.succ
     );
 
+    if (oldX.prev != nullptr)
+      oldX.prev->succ = newX.get();
+    if (oldX.succ != nullptr)
+      oldX.succ->prev = newX.get();
+
     std::shared_ptr<Node> newZ = std::make_shared<Node>(
       oldX.right->value,
       newX,
@@ -210,6 +214,11 @@ private:
       oldX.right->prev,
       oldX.right->succ
     );
+
+    if (oldX.right->prev != nullptr)
+      oldX.right->prev->succ = newZ.get();
+    if (oldX.right->succ != nullptr)
+      oldX.right->succ->prev = newZ.get();
 
     newX->parent = newZ.get();
 
@@ -238,6 +247,11 @@ private:
       oldX.succ
     );
 
+    if (oldX.prev != nullptr)
+      oldX.prev->succ = newX.get();
+    if (oldX.succ != nullptr)
+      oldX.succ->prev = newX.get();
+
     std::shared_ptr<Node> newZ = std::make_shared<Node>(
       oldX.left->value,
       oldX.left->left,
@@ -246,6 +260,11 @@ private:
       oldX.right->prev,
       oldX.right->succ
     );
+
+    if (oldX.right->prev != nullptr)
+      oldX.right->prev->succ = newZ.get();
+    if (oldX.right->succ != nullptr)
+      oldX.right->succ->prev = newZ.get();
 
     newX->parent = newZ.get();
 
@@ -318,16 +337,18 @@ private:
     Node *current_ptr = ptr.get();
 
     auto insert_or_recurse =
-      [=](std::shared_ptr<Node> *parents_ptr, T value, int position) {
+      [=, this](std::shared_ptr<Node> *parents_ptr, T value, int position) {
         if (*parents_ptr == nullptr) {
           ASSERT(position == 0, "Position should be zero");
           *parents_ptr =
             std::make_shared<Node>(value, current_ptr, predecessor, successor);
 
-	  if (predecessor != nullptr)
-	    predecessor->succ = (*parents_ptr).get();
-	  if (successor != nullptr)
-	    successor->prev = (*parents_ptr).get();
+          if (predecessor != nullptr) {
+            predecessor->succ = (*parents_ptr).get();
+          }
+
+          if (successor != nullptr)
+            successor->prev = (*parents_ptr).get();
 
           rotate_if_necessary(parents_ptr);    // hope this works??
         } else {

@@ -1,5 +1,4 @@
 #include "Logger.h"
-#include <gsl/gsl>
 
 class Logger {
 private:
@@ -7,7 +6,7 @@ private:
 
 public:
   static Logger &get() {
-    static gsl::owner<Logger*> logger = new Logger();
+    static Logger* logger = new Logger();
     return *logger;
   }
 
