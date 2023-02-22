@@ -4,7 +4,6 @@
 #include "../misc/Logger.h"
 #include "../misc/Tests.h"
 
-#include <chrono>
 #include <iostream>
 #include <stdio.h>
 #include <thread>
@@ -19,9 +18,8 @@ int main() {
     cursor.insert_text("a");
     cursor.insert_text("b");
     cursor.insert_text("c");
-    cursor.insert_newline();
-    cursor.insert_text("d");
-    cursor.insert_text("e");
+    cursor.move_right();
+    cursor.move_left();
     cursor.delete_character_before();
   });
 
