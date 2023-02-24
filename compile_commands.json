@@ -37,25 +37,31 @@
   },
   {
     "directory": "/home/joshua/cppmacs/build",
-    "command": "c++ -Icppmacs.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -MD -MQ cppmacs.p/src_frontend_Entry.cpp.o -MF cppmacs.p/src_frontend_Entry.cpp.o.d -o cppmacs.p/src_frontend_Entry.cpp.o -c ../src/frontend/Entry.cpp",
+    "command": "c++ -Icppmacs.p -I. -I.. -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/harfbuzz -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/sysprof-4 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -pthread -MD -MQ cppmacs.p/src_frontend_Entry.cpp.o -MF cppmacs.p/src_frontend_Entry.cpp.o.d -o cppmacs.p/src_frontend_Entry.cpp.o -c ../src/frontend/Entry.cpp",
     "file": "../src/frontend/Entry.cpp",
     "output": "cppmacs.p/src_frontend_Entry.cpp.o"
   },
   {
     "directory": "/home/joshua/cppmacs/build",
-    "command": "c++ -Icppmacs.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -MD -MQ cppmacs.p/src_misc_Tests.cpp.o -MF cppmacs.p/src_misc_Tests.cpp.o.d -o cppmacs.p/src_misc_Tests.cpp.o -c ../src/misc/Tests.cpp",
+    "command": "c++ -Icppmacs.p -I. -I.. -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/harfbuzz -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/sysprof-4 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -pthread -MD -MQ cppmacs.p/src_frontend_Window.cpp.o -MF cppmacs.p/src_frontend_Window.cpp.o.d -o cppmacs.p/src_frontend_Window.cpp.o -c ../src/frontend/Window.cpp",
+    "file": "../src/frontend/Window.cpp",
+    "output": "cppmacs.p/src_frontend_Window.cpp.o"
+  },
+  {
+    "directory": "/home/joshua/cppmacs/build",
+    "command": "c++ -Icppmacs.p -I. -I.. -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/harfbuzz -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/sysprof-4 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -pthread -MD -MQ cppmacs.p/src_misc_Tests.cpp.o -MF cppmacs.p/src_misc_Tests.cpp.o.d -o cppmacs.p/src_misc_Tests.cpp.o -c ../src/misc/Tests.cpp",
     "file": "../src/misc/Tests.cpp",
     "output": "cppmacs.p/src_misc_Tests.cpp.o"
   },
   {
     "directory": "/home/joshua/cppmacs/build",
-    "command": "c++ -Icppmacs.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -MD -MQ cppmacs.p/src_misc_Logger.cpp.o -MF cppmacs.p/src_misc_Logger.cpp.o.d -o cppmacs.p/src_misc_Logger.cpp.o -c ../src/misc/Logger.cpp",
+    "command": "c++ -Icppmacs.p -I. -I.. -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/harfbuzz -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/sysprof-4 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -pthread -MD -MQ cppmacs.p/src_misc_Logger.cpp.o -MF cppmacs.p/src_misc_Logger.cpp.o.d -o cppmacs.p/src_misc_Logger.cpp.o -c ../src/misc/Logger.cpp",
     "file": "../src/misc/Logger.cpp",
     "output": "cppmacs.p/src_misc_Logger.cpp.o"
   },
   {
     "directory": "/home/joshua/cppmacs/build",
-    "command": "c++ -Icppmacs.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -MD -MQ cppmacs.p/src_misc_Util.cpp.o -MF cppmacs.p/src_misc_Util.cpp.o.d -o cppmacs.p/src_misc_Util.cpp.o -c ../src/misc/Util.cpp",
+    "command": "c++ -Icppmacs.p -I. -I.. -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/harfbuzz -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/sysprof-4 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -pthread -MD -MQ cppmacs.p/src_misc_Util.cpp.o -MF cppmacs.p/src_misc_Util.cpp.o.d -o cppmacs.p/src_misc_Util.cpp.o -c ../src/misc/Util.cpp",
     "file": "../src/misc/Util.cpp",
     "output": "cppmacs.p/src_misc_Util.cpp.o"
   }

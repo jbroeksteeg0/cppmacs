@@ -1,5 +1,9 @@
 project('cppmacs', 'cpp', default_options: ['cpp_std=c++20'])
 
+glfw = dependency('glfw3')
+freetype = dependency('freetype2')
+glm = dependency('glm')
+
 backend = static_library('cppmacs', 
 	'src/backend/Rope.h',
 	'src/backend/CppMacs.cpp',
@@ -13,9 +17,11 @@ backend = static_library('cppmacs',
 
 executable('cppmacs',
 	'src/frontend/Entry.cpp',
+	'src/frontend/Window.cpp',
 
 	'src/misc/Tests.cpp',
 	'src/misc/Logger.cpp',
 	'src/misc/Util.cpp',
 
-	link_with: backend)
+	link_with: backend,
+	dependencies: [glfw, freetype, glm])

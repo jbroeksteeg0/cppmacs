@@ -3,6 +3,7 @@
 #include "../backend/Buffer.h"
 #include "../misc/Logger.h"
 #include "../misc/Tests.h"
+#include "Window.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -12,18 +13,7 @@
 int main() {
   SET_LOG_LEVEL(LogLevel::DEBUG);
 
-  Buffer buffer = Buffer();
-  
-  buffer.use_cursor([](BufferCursor& cursor){
-    cursor.insert_text("a");
-    cursor.insert_text("b");
-    cursor.insert_text("c");
-    cursor.move_right();
-    cursor.move_left();
-    cursor.delete_character_before();
-  });
+  Window window = Window();
 
-  auto text = buffer.get_formatted_text();
-  std::cout << (*text)[0].text << std::endl;
-
+  window.run();
 }
