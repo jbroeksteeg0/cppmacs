@@ -24,7 +24,7 @@ public:
     float y,
     std::array<float, 3> color = {1.0f, 1.0f, 1.0f}
   );
-
+  void set_ortho_projection(float width, float height);
 private:
   struct Character {
     unsigned int id;       // text id
