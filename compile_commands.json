@@ -1,37 +1,37 @@
 [
   {
     "directory": "/home/joshua/cppmacs/build",
-    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -fPIC -MD -MQ libcppmacs.a.p/src_backend_CppMacs.cpp.o -MF libcppmacs.a.p/src_backend_CppMacs.cpp.o.d -o libcppmacs.a.p/src_backend_CppMacs.cpp.o -c ../src/backend/CppMacs.cpp",
+    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -fPIC -pthread -MD -MQ libcppmacs.a.p/src_backend_CppMacs.cpp.o -MF libcppmacs.a.p/src_backend_CppMacs.cpp.o.d -o libcppmacs.a.p/src_backend_CppMacs.cpp.o -c ../src/backend/CppMacs.cpp",
     "file": "../src/backend/CppMacs.cpp",
     "output": "libcppmacs.a.p/src_backend_CppMacs.cpp.o"
   },
   {
     "directory": "/home/joshua/cppmacs/build",
-    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -fPIC -MD -MQ libcppmacs.a.p/src_backend_Buffer.cpp.o -MF libcppmacs.a.p/src_backend_Buffer.cpp.o.d -o libcppmacs.a.p/src_backend_Buffer.cpp.o -c ../src/backend/Buffer.cpp",
+    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -fPIC -pthread -MD -MQ libcppmacs.a.p/src_backend_Buffer.cpp.o -MF libcppmacs.a.p/src_backend_Buffer.cpp.o.d -o libcppmacs.a.p/src_backend_Buffer.cpp.o -c ../src/backend/Buffer.cpp",
     "file": "../src/backend/Buffer.cpp",
     "output": "libcppmacs.a.p/src_backend_Buffer.cpp.o"
   },
   {
     "directory": "/home/joshua/cppmacs/build",
-    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -fPIC -MD -MQ libcppmacs.a.p/src_backend_BufferCursor.cpp.o -MF libcppmacs.a.p/src_backend_BufferCursor.cpp.o.d -o libcppmacs.a.p/src_backend_BufferCursor.cpp.o -c ../src/backend/BufferCursor.cpp",
+    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -fPIC -pthread -MD -MQ libcppmacs.a.p/src_backend_BufferCursor.cpp.o -MF libcppmacs.a.p/src_backend_BufferCursor.cpp.o.d -o libcppmacs.a.p/src_backend_BufferCursor.cpp.o -c ../src/backend/BufferCursor.cpp",
     "file": "../src/backend/BufferCursor.cpp",
     "output": "libcppmacs.a.p/src_backend_BufferCursor.cpp.o"
   },
   {
     "directory": "/home/joshua/cppmacs/build",
-    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -fPIC -MD -MQ libcppmacs.a.p/src_misc_Tests.cpp.o -MF libcppmacs.a.p/src_misc_Tests.cpp.o.d -o libcppmacs.a.p/src_misc_Tests.cpp.o -c ../src/misc/Tests.cpp",
+    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -fPIC -pthread -MD -MQ libcppmacs.a.p/src_misc_Tests.cpp.o -MF libcppmacs.a.p/src_misc_Tests.cpp.o.d -o libcppmacs.a.p/src_misc_Tests.cpp.o -c ../src/misc/Tests.cpp",
     "file": "../src/misc/Tests.cpp",
     "output": "libcppmacs.a.p/src_misc_Tests.cpp.o"
   },
   {
     "directory": "/home/joshua/cppmacs/build",
-    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -fPIC -MD -MQ libcppmacs.a.p/src_misc_Logger.cpp.o -MF libcppmacs.a.p/src_misc_Logger.cpp.o.d -o libcppmacs.a.p/src_misc_Logger.cpp.o -c ../src/misc/Logger.cpp",
+    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -fPIC -pthread -MD -MQ libcppmacs.a.p/src_misc_Logger.cpp.o -MF libcppmacs.a.p/src_misc_Logger.cpp.o.d -o libcppmacs.a.p/src_misc_Logger.cpp.o -c ../src/misc/Logger.cpp",
     "file": "../src/misc/Logger.cpp",
     "output": "libcppmacs.a.p/src_misc_Logger.cpp.o"
   },
   {
     "directory": "/home/joshua/cppmacs/build",
-    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -fPIC -MD -MQ libcppmacs.a.p/src_misc_Util.cpp.o -MF libcppmacs.a.p/src_misc_Util.cpp.o.d -o libcppmacs.a.p/src_misc_Util.cpp.o -c ../src/misc/Util.cpp",
+    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -fPIC -pthread -MD -MQ libcppmacs.a.p/src_misc_Util.cpp.o -MF libcppmacs.a.p/src_misc_Util.cpp.o.d -o libcppmacs.a.p/src_misc_Util.cpp.o -c ../src/misc/Util.cpp",
     "file": "../src/misc/Util.cpp",
     "output": "libcppmacs.a.p/src_misc_Util.cpp.o"
   },

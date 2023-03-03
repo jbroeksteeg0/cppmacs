@@ -6,6 +6,7 @@ glm = dependency('glm')
 gl = dependency('gl')
 opengl = dependency('opengl')
 glew = dependency('glew')
+thread = dependency('threads')
 
 backend = static_library('cppmacs', 
 	'src/backend/Rope.h',
@@ -16,6 +17,8 @@ backend = static_library('cppmacs',
 	'src/misc/Tests.cpp',
 	'src/misc/Logger.cpp',
 	'src/misc/Util.cpp',
+
+	dependencies: [thread]
 )
 
 executable('cppmacs',
@@ -29,4 +32,4 @@ executable('cppmacs',
 	'src/misc/Util.cpp',
 
 	link_with: backend,
-	dependencies: [glfw, freetype, glm, gl, opengl, glew])
+	dependencies: [glfw, freetype, glm, gl, opengl, glew, thread])
