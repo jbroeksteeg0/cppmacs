@@ -14,6 +14,8 @@ backend = static_library('cppmacs',
 	'src/backend/Buffer.cpp',
 	'src/backend/BufferCursor.cpp',
 
+	'src/modules/EditModule.cpp',
+
 	'src/misc/Tests.cpp',
 	'src/misc/Logger.cpp',
 	'src/misc/Util.cpp',
@@ -27,6 +29,8 @@ executable('cppmacs',
 	'src/frontend/Program.cpp',
 	'src/frontend/Frame.cpp',
         'src/frontend/FrameTree.cpp',
+
+	'src/modules/EditModule.cpp',
 
 	'src/misc/Tests.cpp',
 	'src/misc/Logger.cpp',
