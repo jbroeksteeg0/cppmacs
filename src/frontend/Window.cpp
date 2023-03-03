@@ -32,9 +32,9 @@ void Window::run() {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glViewport(400, 0, 400, 600);
+    glViewport(200, 300, 400, 600);
     temp_frame->draw();
-    
+
     glfwSwapBuffers(m_window);
     glfwPollEvents();
   }
@@ -115,25 +115,27 @@ void Window::draw_text(
   std::string text, float x, float y, std::array<float, 3> color
 ) {
   float scale = 1.0;
-  // activate corresponding render state
-  glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
 
+  // activate corresponding render state
   m_text_program.use();
 
   // set the projection
+  /*
+  glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
   glUniformMatrix4fv(
     glGetUniformLocation(m_text_program.get_program(), "projection"),
     1,
     GL_FALSE,
     glm::value_ptr(projection)
   );
+  */
 
   // set the color of the text
   glUniform3f(
     glGetUniformLocation(m_text_program.get_program(), "textColor"),
-    1.0f,
-    0.0f,
-    0.0f
+    color[0],
+    color[1],
+    color[2]
   );
 
   glActiveTexture(GL_TEXTURE0);
@@ -180,4 +182,14 @@ void Window::draw_text(
   }
   glBindVertexArray(0);
   glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Window::set_ortho_projection(float width, float height) {
+  glm::mat4 projection = glm::ortho(0.0f,width,0.0f,height);
+  glUniformMatrix4fv(
+    glGetUniformLocation(m_text_program.get_program(), "projection"),
+    1,
+    GL_FALSE,
+    glm::value_ptr(projection)
+  );
 }
