@@ -1,5 +1,6 @@
 #pragma once
 #include "Frame.h"
+#include "FrameTree.h"
 #include "Program.h"
 #include "Shaders.h"
 #include <GL/gl.h>
@@ -25,6 +26,7 @@ public:
     std::array<float, 3> color = {1.0f, 1.0f, 1.0f}
   );
   void set_ortho_projection(float width, float height);
+
 private:
   struct Character {
     unsigned int id;       // text id
@@ -41,6 +43,7 @@ private:
   unsigned int m_text_VAO, m_text_VBO;
 
   Frame *temp_frame;
+
 private:
   void init_freetype();
   void init_text();

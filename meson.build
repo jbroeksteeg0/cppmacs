@@ -23,6 +23,7 @@ executable('cppmacs',
 	'src/frontend/Window.cpp',
 	'src/frontend/Program.cpp',
 	'src/frontend/Frame.cpp',
+        'src/frontend/FrameTree.cpp',
 
 	'src/misc/Tests.cpp',
 	'src/misc/Logger.cpp',
