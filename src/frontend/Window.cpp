@@ -19,7 +19,7 @@ Window::Window() {
   m_text_program = Program(get_text_vertex, get_text_fragment);
   init_text();
 
-  temp_frame = new Frame(this);
+  FrameTree m_frame_tree = FrameTree(this);
 }
 
 Window::~Window() {
@@ -32,8 +32,11 @@ void Window::run() {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glViewport(200, 300, 400, 600);
-    temp_frame->draw();
+    // GET WINDOW WIDTH AND HEIGHT
+    int window_width, window_height;
+    glfwGetWindowSize(m_window, &window_width, &window_height);
+
+    m_frame_tree.draw_all(window_width, window_height);
 
     glfwSwapBuffers(m_window);
     glfwPollEvents();

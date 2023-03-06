@@ -42,8 +42,7 @@ private:
 
   unsigned int m_text_VAO, m_text_VBO;
 
-  Frame *temp_frame;
-
+  FrameTree m_frame_tree;
 private:
   void init_freetype();
   void init_text();
