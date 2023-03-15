@@ -19,6 +19,12 @@
   },
   {
     "directory": "/home/joshua/cppmacs/build",
+    "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -fPIC -pthread -MD -MQ libcppmacs.a.p/src_backend_BufferManager.cpp.o -MF libcppmacs.a.p/src_backend_BufferManager.cpp.o.d -o libcppmacs.a.p/src_backend_BufferManager.cpp.o -c ../src/backend/BufferManager.cpp",
+    "file": "../src/backend/BufferManager.cpp",
+    "output": "libcppmacs.a.p/src_backend_BufferManager.cpp.o"
+  },
+  {
+    "directory": "/home/joshua/cppmacs/build",
     "command": "c++ -Ilibcppmacs.a.p -I. -I.. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -fPIC -pthread -MD -MQ libcppmacs.a.p/src_modules_EditModule.cpp.o -MF libcppmacs.a.p/src_modules_EditModule.cpp.o.d -o libcppmacs.a.p/src_modules_EditModule.cpp.o -c ../src/modules/EditModule.cpp",
     "file": "../src/modules/EditModule.cpp",
     "output": "libcppmacs.a.p/src_modules_EditModule.cpp.o"

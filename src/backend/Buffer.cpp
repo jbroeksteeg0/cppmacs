@@ -3,6 +3,7 @@
 Buffer::Buffer()
     : m_file({}), m_rope(Rope<char>()), m_cursor(BufferCursor(this)) {}
 
+// TODO: make this actually load the file lmao
 Buffer::Buffer(std::string file_path)
     : m_file(file_path), m_rope(Rope<char>()), m_cursor(BufferCursor(this)) {}
 

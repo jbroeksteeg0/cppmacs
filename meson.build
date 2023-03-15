@@ -13,6 +13,7 @@ backend = static_library('cppmacs',
 	'src/backend/CppMacs.cpp',
 	'src/backend/Buffer.cpp',
 	'src/backend/BufferCursor.cpp',
+	'src/backend/BufferManager.cpp',
 
 	'src/modules/EditModule.cpp',
 

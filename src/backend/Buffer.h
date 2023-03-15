@@ -15,6 +15,8 @@ struct FormattedText {
   std::string text;
 };
 
+class BufferManager;
+
 class Buffer {
 public:
   explicit Buffer();
@@ -40,4 +42,5 @@ private:
 private:
   void start_threaded_event_loop();
   friend struct BufferCursor;
+  friend class BufferManager;
 };

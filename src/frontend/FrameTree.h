@@ -1,8 +1,10 @@
 #pragma once
 #include "Frame.h"
+#include "Window.h"
 #include <memory>
 
 struct Frame;
+class Window;
 
 namespace __FRAMETREE_IMPL {
 
@@ -10,11 +12,12 @@ enum class Type { FRAME, HSPLIT, VSPLIT };
 using enum Type;
 
 struct Node {
-  std::shared_ptr<Node> left, right;
+  std::unique_ptr<Node> left, right;
   Type type;
   std::unique_ptr<Frame> frame;
   float split;
 
+  int x, y, width, height;
   // leaf
   Node(std::unique_ptr<Frame> frame)
       : left(nullptr), right(nullptr), type(FRAME), frame(std::move(frame)),
@@ -24,15 +27,19 @@ struct Node {
   Node(
     Type type,
     float split,
-    std::shared_ptr<Node> left,
-    std::shared_ptr<Node> right
+    std::unique_ptr<Node> left,
+    std::unique_ptr<Node> right
   )
-      : left(left), right(right), type(type), frame(nullptr), split(split) {}
+      : left(std::move(left)), right(std::move(right)), type(type),
+        frame(nullptr), split(split) {}
 
   void draw_all_frames();
   void update_frame_geometry(float x, float y, float width, float height);
 
   friend class FrameTree;
+
+  void draw_and_recurse();
+  void update_dimensions(int x, int y, int width, int height);
 };
 
 };    // namespace __FRAMETREE_IMPL
@@ -40,8 +47,10 @@ struct Node {
 class FrameTree {
   using Node = __FRAMETREE_IMPL::Node;
   using enum __FRAMETREE_IMPL::Type;
+
 public:
-  FrameTree(std::unique_ptr<Frame> root_frame);
+  FrameTree(Window *parent);
+  FrameTree(Window *parent, std::unique_ptr<Frame> root_frame);
 
   void create_frame_hsplit(Node *at, float split);
   void create_frame_vsplit(Node *at, float split);
@@ -50,5 +59,7 @@ public:
   void draw_all_frames();
   void update_frame_geometry(float x, float y, float width, float height);
   std::shared_ptr<Node> m_root;
+
 private:
+  Window *m_window;
 };

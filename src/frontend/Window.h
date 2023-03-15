@@ -46,7 +46,6 @@ private:
 
   Frame *temp_frame;
   std::unique_ptr<FrameTree> m_frame_tree;
-
 private:
   void init_freetype();
   void init_text();

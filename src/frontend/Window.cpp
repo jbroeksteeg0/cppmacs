@@ -19,7 +19,9 @@ Window::Window() {
   m_text_program = Program(get_text_vertex, get_text_fragment);
   init_text();
 
-  m_frame_tree = std::make_unique<FrameTree>(std::make_unique<Frame>(this));
+  std::shared_ptr<Buffer> temp = std::make_shared<Buffer>();
+
+  m_frame_tree = std::make_unique<FrameTree>(this, std::make_unique<Frame>(temp, this));
   m_frame_tree->create_frame_hsplit(m_frame_tree->m_root.get(), 0.666);
 }
 
@@ -33,7 +35,10 @@ void Window::run() {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    m_frame_tree->update_frame_geometry(0,0,800, 600);
+    // GET WINDOW WIDTH AND HEIGHT
+    int window_width, window_height;
+    glfwGetWindowSize(m_window, &window_width, &window_height);
+    m_frame_tree->update_frame_geometry(0, 0, window_width, window_height);
     m_frame_tree->draw_all_frames();
 
     glfwSwapBuffers(m_window);
