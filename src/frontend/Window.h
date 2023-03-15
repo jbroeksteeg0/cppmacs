@@ -10,9 +10,11 @@
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
 #include <iostream>
+#include <memory>
 #include <vector>
 
 class Frame;
+class FrameTree;
 
 class Window {
 public:
@@ -43,6 +45,7 @@ private:
   unsigned int m_text_VAO, m_text_VBO;
 
   Frame *temp_frame;
+  std::unique_ptr<FrameTree> m_frame_tree;
 
 private:
   void init_freetype();

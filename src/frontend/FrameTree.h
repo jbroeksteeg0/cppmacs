@@ -2,8 +2,7 @@
 #include "Frame.h"
 #include <memory>
 
-class FrameTree;
-class Frame;
+struct Frame;
 
 namespace __FRAMETREE_IMPL {
 
@@ -30,6 +29,9 @@ struct Node {
   )
       : left(left), right(right), type(type), frame(nullptr), split(split) {}
 
+  void draw_all_frames();
+  void update_frame_geometry(float x, float y, float width, float height);
+
   friend class FrameTree;
 };
 
@@ -38,12 +40,15 @@ struct Node {
 class FrameTree {
   using Node = __FRAMETREE_IMPL::Node;
   using enum __FRAMETREE_IMPL::Type;
-
-  std::shared_ptr<Node> root;
-
+public:
   FrameTree(std::unique_ptr<Frame> root_frame);
 
-  void create_frame_hsplit(Node *at);
-  void create_frame_vsplit(Node *at);
+  void create_frame_hsplit(Node *at, float split);
+  void create_frame_vsplit(Node *at, float split);
   void delete_frame(Node *to_delete);
+
+  void draw_all_frames();
+  void update_frame_geometry(float x, float y, float width, float height);
+  std::shared_ptr<Node> m_root;
+private:
 };

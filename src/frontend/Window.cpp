@@ -19,7 +19,8 @@ Window::Window() {
   m_text_program = Program(get_text_vertex, get_text_fragment);
   init_text();
 
-  temp_frame = new Frame(this);
+  m_frame_tree = std::make_unique<FrameTree>(std::make_unique<Frame>(this));
+  m_frame_tree->create_frame_hsplit(m_frame_tree->m_root.get(), 0.666);
 }
 
 Window::~Window() {
@@ -32,8 +33,8 @@ void Window::run() {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glViewport(200, 300, 400, 600);
-    temp_frame->draw();
+    m_frame_tree->update_frame_geometry(0,0,800, 600);
+    m_frame_tree->draw_all_frames();
 
     glfwSwapBuffers(m_window);
     glfwPollEvents();
@@ -185,7 +186,7 @@ void Window::draw_text(
 }
 
 void Window::set_ortho_projection(float width, float height) {
-  glm::mat4 projection = glm::ortho(0.0f,width,0.0f,height);
+  glm::mat4 projection = glm::ortho(0.0f, width, 0.0f, height);
   glUniformMatrix4fv(
     glGetUniformLocation(m_text_program.get_program(), "projection"),
     1,
