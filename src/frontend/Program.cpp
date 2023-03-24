@@ -3,6 +3,7 @@
 
 Program::Program() : m_vertex(""), m_fragment("") {}
 
+// TODO: memory leak with shaders
 Program::Program(std::string vertex, std::string fragment)
     : m_vertex(vertex), m_fragment(fragment) {
   // compile vertex
@@ -46,6 +47,7 @@ Program::Program(std::string vertex, std::string fragment)
     ERROR(err);
     exit(1);
   }
+
   glDeleteShader(vertex_id);
   glDeleteShader(fragment_id);
 }

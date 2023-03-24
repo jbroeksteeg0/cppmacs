@@ -1,4 +1,5 @@
 #pragma once
+#include "Canvas.h"
 #include "Frame.h"
 #include "FrameTree.h"
 #include "Program.h"
@@ -13,7 +14,7 @@
 #include <memory>
 #include <vector>
 
-class Frame;
+struct Frame;
 class FrameTree;
 
 class Window {
@@ -21,32 +22,11 @@ public:
   Window();
   ~Window();
   void run();
-  void draw_text(
-    std::string text,
-    float x,
-    float y,
-    std::array<float, 3> color = {1.0f, 1.0f, 1.0f}
-  );
-  void set_ortho_projection(float width, float height);
 
+  std::shared_ptr<Canvas> get_canvas() const;
 private:
-  struct Character {
-    unsigned int id;       // text id
-    glm::ivec2 size;       // size
-    glm::ivec2 bearing;    // offset to TL corner
-    long int advance;      // horizontal advance to next origin
-  };
-  std::vector<Character> m_characters;
   GLFWwindow *m_window;
-  std::string m_vertex_shader;
-  std::string m_fragment_shader;
-  Program m_text_program = Program();
 
-  unsigned int m_text_VAO, m_text_VBO;
-
-  Frame *temp_frame;
   std::unique_ptr<FrameTree> m_frame_tree;
-private:
-  void init_freetype();
-  void init_text();
+  std::shared_ptr<Canvas> m_canvas;
 };

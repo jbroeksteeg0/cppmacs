@@ -30,6 +30,7 @@ executable('cppmacs',
 	'src/frontend/Program.cpp',
 	'src/frontend/Frame.cpp',
         'src/frontend/FrameTree.cpp',
+	'src/frontend/Canvas.cpp',
 
 	'src/modules/EditModule.cpp',
 
