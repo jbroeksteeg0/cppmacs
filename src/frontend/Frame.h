@@ -31,5 +31,6 @@ private:
   void draw_border();
 
   friend class FrameTree;
+  friend class InputManager;
   friend struct __FRAMETREE_IMPL::Node;
 };

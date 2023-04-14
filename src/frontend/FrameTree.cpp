@@ -50,7 +50,7 @@ void FrameTree::update_frame_geometry(
 FrameTree::FrameTree(
   Window *parent, std::unique_ptr<Frame> root_frame
 )
-    : m_window(parent) {
+  : m_window(parent), m_selected(m_root) {
   m_root = std::make_shared<Node>(std::move(root_frame));
 }
 

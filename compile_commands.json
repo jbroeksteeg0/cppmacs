@@ -85,6 +85,12 @@
   },
   {
     "directory": "/home/joshua/cppmacs/build",
+    "command": "c++ -Icppmacs.p -I. -I.. -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/harfbuzz -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/sysprof-4 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -pthread -MD -MQ cppmacs.p/src_frontend_InputManager.cpp.o -MF cppmacs.p/src_frontend_InputManager.cpp.o.d -o cppmacs.p/src_frontend_InputManager.cpp.o -c ../src/frontend/InputManager.cpp",
+    "file": "../src/frontend/InputManager.cpp",
+    "output": "cppmacs.p/src_frontend_InputManager.cpp.o"
+  },
+  {
+    "directory": "/home/joshua/cppmacs/build",
     "command": "c++ -Icppmacs.p -I. -I.. -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/harfbuzz -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/sysprof-4 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=c++20 -O0 -g -pthread -MD -MQ cppmacs.p/src_modules_EditModule.cpp.o -MF cppmacs.p/src_modules_EditModule.cpp.o.d -o cppmacs.p/src_modules_EditModule.cpp.o -c ../src/modules/EditModule.cpp",
     "file": "../src/modules/EditModule.cpp",
     "output": "cppmacs.p/src_modules_EditModule.cpp.o"

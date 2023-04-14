@@ -4,10 +4,18 @@
 
 #include FT_FREETYPE_H
 
+void key_callback(GLFWwindow *window, int key, int scan_code, int action, int mods) {
+  Window* this_window = (Window*)glfwGetWindowUserPointer(window);
+
+  if (action == GLFW_PRESS)
+    this_window->m_input_manager->press_key(key, mods);
+}
 Window::Window() {
   glfwInit();
   m_window = glfwCreateWindow(800, 600, "window", nullptr, nullptr);
   glfwMakeContextCurrent(m_window);
+  glfwSetWindowUserPointer(m_window, this);
+  glfwSetKeyCallback(m_window, key_callback);
 
   if (glewInit() != GLEW_OK) {
     ERROR("Error initialising glew");
@@ -22,6 +30,7 @@ Window::Window() {
   m_frame_tree->create_frame_vsplit(m_frame_tree->m_root->left.get(), 0.666);
 
   m_canvas = std::make_shared<Canvas>(this);
+  m_input_manager = std::make_unique<InputManager>(this);
 }
 
 Window::~Window() {
@@ -49,18 +58,6 @@ void Window::run() {
   }
 }
 
-
-
-
-
-/*
-void Window::set_ortho_projection(float width, float height) {
-  glm::mat4 projection = glm::ortho(0.0f, width, 0.0f, height);
-  glUniformMatrix4fv(
-    glGetUniformLocation(m_text_program.get_program(), "projection"),
-    1,
-    GL_FALSE,
-    glm::value_ptr(projection)
-  );
+std::weak_ptr<__FRAMETREE_IMPL::Node> Window::get_active_frame() {
+  return m_frame_tree->m_selected;
 }
-*/

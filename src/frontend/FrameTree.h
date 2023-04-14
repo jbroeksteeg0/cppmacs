@@ -58,8 +58,11 @@ public:
 
   void draw_all_frames();
   void update_frame_geometry(float x, float y, float width, float height);
-  std::shared_ptr<Node> m_root;
 
 private:
   Window *m_window;
+  std::shared_ptr<Node> m_root;
+  std::weak_ptr<Node> m_selected;
+
+  friend class Window;
 };

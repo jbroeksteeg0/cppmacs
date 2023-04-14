@@ -9,6 +9,7 @@
 #include <GLFW/glfw3.h>
 #include <array>
 #include <glm/ext.hpp>
+#include "./InputManager.h"
 #include <glm/glm.hpp>
 #include <iostream>
 #include <memory>
@@ -16,6 +17,7 @@
 
 struct Frame;
 class FrameTree;
+class InputManager;
 
 class Window {
 public:
@@ -28,5 +30,10 @@ private:
   GLFWwindow *m_window;
 
   std::unique_ptr<FrameTree> m_frame_tree;
+  std::unique_ptr<InputManager> m_input_manager;
   std::shared_ptr<Canvas> m_canvas;
+private:
+  std::weak_ptr<__FRAMETREE_IMPL::Node> get_active_frame();
+  friend void key_callback(GLFWwindow *window, int key, int scan_code, int action, int mods);
+  friend class InputManager;
 };
