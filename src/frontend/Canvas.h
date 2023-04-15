@@ -20,6 +20,10 @@ public:
   );
   void draw_rectangle(float x, float y, float width, float height);
   void set_ortho_projection(float width, float height);
+
+  void text_box_init(int x, int y, int width, int height);
+  void text_box_write_line(const std::string& text);
+  bool text_box_is_finished();
 private:
   Window *m_ptr;
 
@@ -37,7 +41,13 @@ private:
 
   Program m_text_program, m_geometry_program;
 
+  int m_text_box_x, m_text_box_y;
+  int m_text_box_width, m_text_box_height;
+  int m_text_box_offset_y;
+
+  const int m_line_spacing=8;
 private:
   void init_text();
   void init_geometry_buffers();
+  std::pair<int,int> get_text_dimensions(const std::string& text) const;
 };

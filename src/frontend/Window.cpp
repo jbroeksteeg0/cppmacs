@@ -88,6 +88,10 @@ void Window::run() {
   }
 }
 
+void Window::add_key_combo(std::string combo, std::function<void(Window *window, BufferCursor cursor)> callback) {
+  m_input_manager->add_key_combo(combo, callback);
+}
+
 std::shared_ptr<Buffer> Window::get_active_buffer() {
   return m_frame_tree->m_selected->frame->m_buffer;
 }

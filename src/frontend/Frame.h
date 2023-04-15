@@ -23,6 +23,8 @@ private:
   int m_x, m_y, m_width, m_height;
   Program m_shader;
 
+  size_t m_text_start_ind;
+  
   unsigned int m_border_vbo;
   unsigned int m_border_vao;
 

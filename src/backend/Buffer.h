@@ -11,10 +11,6 @@
 #include <thread>
 #include <vector>
 
-struct FormattedText {
-  std::string text;
-};
-
 class BufferManager;
 
 class Buffer {
@@ -24,7 +20,7 @@ public:
   ~Buffer();
 
   // Generate the raw text, run hooks, output
-  std::unique_ptr<std::vector<FormattedText>> get_formatted_text();
+  std::vector<std::string> get_formatted_text();
 
   void use_cursor(std::function<void(BufferCursor &)> func
   );    // add to the queue
@@ -33,7 +29,6 @@ private:
   std::optional<std::string> m_file;
   Rope<char> m_rope;
   BufferCursor m_cursor;
-  std::vector<Module> m_modules; // TODO: go from here, unimplemented
   
   std::thread m_thread;
   std::mutex m_queue_mutex;

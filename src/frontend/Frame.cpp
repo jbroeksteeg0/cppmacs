@@ -20,8 +20,9 @@ void Frame::draw() {
   );
 
   draw_border();
+  std::shared_ptr<Canvas> canvas = m_window->get_canvas();
 
-  m_window->get_canvas()->draw_text("hi from bottom", 0, 0);
+  m_window->get_canvas()->text_box_write_line("Hello World! Hello World! Hello World! Hello World!");
 }
 
 void Frame::initialise_opengl_data() {
