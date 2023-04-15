@@ -61,8 +61,8 @@ public:
 
 private:
   Window *m_window;
+  Node *m_selected;
   std::shared_ptr<Node> m_root;
-  std::weak_ptr<Node> m_selected;
 
   friend class Window;
 };

@@ -2,10 +2,13 @@
 #include "Shaders.h"
 
 Frame::Frame(Window *parent) : m_window(parent) {
+  glViewport(m_x, m_y, m_width, m_height);
   initialise_opengl_data();
 }
 Frame::Frame(std::shared_ptr<Buffer> buffer, Window *parent)
     : m_window(parent), m_buffer(buffer) {
+  glViewport(m_x, m_y, m_width, m_height);
+
   initialise_opengl_data();
 }
 

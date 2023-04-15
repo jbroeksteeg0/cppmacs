@@ -4,15 +4,22 @@
 
 #include FT_FREETYPE_H
 
-void key_callback(GLFWwindow *window, int key, int scan_code, int action, int mods) {
-  Window* this_window = (Window*)glfwGetWindowUserPointer(window);
+void key_callback(
+  GLFWwindow *window, int key, int scan_code, int action, int mods
+) {
+  Window *this_window = (Window *)glfwGetWindowUserPointer(window);
 
   if (action == GLFW_PRESS)
     this_window->m_input_manager->press_key(key, mods);
 }
+
 Window::Window() {
   glfwInit();
+
   m_window = glfwCreateWindow(800, 600, "window", nullptr, nullptr);
+  m_width = 800;
+  m_height = 600;
+
   glfwMakeContextCurrent(m_window);
   glfwSetWindowUserPointer(m_window, this);
   glfwSetKeyCallback(m_window, key_callback);
@@ -25,12 +32,37 @@ Window::Window() {
 
   std::shared_ptr<Buffer> temp = std::make_shared<Buffer>();
 
-  m_frame_tree = std::make_unique<FrameTree>(this, std::make_unique<Frame>(temp, this));
-  m_frame_tree->create_frame_hsplit(m_frame_tree->m_root.get(), 0.666);
-  m_frame_tree->create_frame_vsplit(m_frame_tree->m_root->left.get(), 0.666);
+  m_frame_tree =
+    std::make_unique<FrameTree>(this, std::make_unique<Frame>(temp, this));
+  // m_frame_tree->create_frame_hsplit(m_frame_tree->m_root.get(), 0.666);
+  //   m_frame_tree->create_frame_vsplit(m_frame_tree->m_root->left.get(),
+  //   0.666);
 
   m_canvas = std::make_shared<Canvas>(this);
   m_input_manager = std::make_unique<InputManager>(this);
+  m_input_manager->add_key_combo(
+    "A B",
+    [](Window *window, BufferCursor cursor) {
+      window->m_frame_tree->create_frame_hsplit(
+        window->m_frame_tree->m_selected, 0.5
+      );
+    }
+  );
+  m_input_manager->add_key_combo(
+    "A C",
+    [](Window *window, BufferCursor cursor) {
+      window->m_frame_tree->create_frame_vsplit(
+        window->m_frame_tree->m_selected, 0.5
+      );
+    }
+  );
+
+  m_input_manager->add_key_combo(
+    "A D",
+    [](Window *window, BufferCursor cursor) {
+      cursor.insert_text("hi");
+    }
+  );
 }
 
 Window::~Window() {
@@ -38,9 +70,7 @@ Window::~Window() {
   glfwTerminate();
 }
 
-std::shared_ptr<Canvas> Window::get_canvas() const {
-  return m_canvas;
-}
+std::shared_ptr<Canvas> Window::get_canvas() const { return m_canvas; }
 void Window::run() {
   while (!glfwWindowShouldClose(m_window)) {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -58,6 +88,6 @@ void Window::run() {
   }
 }
 
-std::weak_ptr<__FRAMETREE_IMPL::Node> Window::get_active_frame() {
-  return m_frame_tree->m_selected;
+std::shared_ptr<Buffer> Window::get_active_buffer() {
+  return m_frame_tree->m_selected->frame->m_buffer;
 }

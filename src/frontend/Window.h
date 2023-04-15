@@ -32,8 +32,10 @@ private:
   std::unique_ptr<FrameTree> m_frame_tree;
   std::unique_ptr<InputManager> m_input_manager;
   std::shared_ptr<Canvas> m_canvas;
+
+  int m_width, m_height;
 private:
-  std::weak_ptr<__FRAMETREE_IMPL::Node> get_active_frame();
+  std::shared_ptr<Buffer> get_active_buffer();
   friend void key_callback(GLFWwindow *window, int key, int scan_code, int action, int mods);
   friend class InputManager;
 };

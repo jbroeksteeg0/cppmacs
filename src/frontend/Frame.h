@@ -33,4 +33,5 @@ private:
   friend class FrameTree;
   friend class InputManager;
   friend struct __FRAMETREE_IMPL::Node;
+  friend class Window;
 };
