@@ -26,7 +26,7 @@ public:
   void run();
 
   std::shared_ptr<Canvas> get_canvas() const;
-  void add_key_combo(std::string combo, std::function<void(Window *window, BufferCursor cursor)> callback);
+  void add_key_combo(std::string combo, std::function<void(Window *window, BufferCursor& cursor)> callback);
 private:
   GLFWwindow *m_window;
 

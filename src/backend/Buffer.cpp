@@ -11,22 +11,23 @@ Buffer::~Buffer() {
   m_thread.std::thread::~thread(); // cancel thread
 }
 
-std::unique_ptr<std::vector<FormattedText>> Buffer::get_formatted_text() {
-  std::lock_guard<std::mutex> lk(m_queue_mutex);
-  
-  std::unique_ptr<std::vector<FormattedText>> formatted_text =
-    std::make_unique<std::vector<FormattedText>>();
+std::vector<std::string> Buffer::get_text() {
+  std::lock_guard<std::mutex> lk(m_queue_mutex); // lock the queue
 
-  std::string current_text = "";
-  for (const char ch : m_rope) {
-    current_text += std::string(1, ch);
+  std::vector<std::string> to_return = {""};
+
+  for (const char ch: m_rope) {
+    if (ch == '\n') {
+      to_return.push_back("");
+    } else {
+      to_return.back().push_back(ch);
+    }
   }
 
-  formatted_text->push_back(FormattedText{current_text});
-  return formatted_text;
+  return to_return;
 }
 
-void Buffer::use_cursor(std::function<void(BufferCursor &)> func) {
+void Buffer::use_cursor(std::function<void(BufferCursor&)> func) {
   std::lock_guard<std::mutex> lk(m_queue_mutex);
   m_event_queue.push(func);
 }
@@ -34,7 +35,7 @@ void Buffer::use_cursor(std::function<void(BufferCursor &)> func) {
 void Buffer::start_threaded_event_loop() {
   m_thread = std::thread([this]() {
     while (true) {
-      std::optional<std::function<void(BufferCursor &)>> func = {};
+      std::optional<std::function<void(BufferCursor&)>> func = {};
 
       // Extract a single event if possible
       {

@@ -15,9 +15,18 @@ int main() {
 
   Window window = Window();
 
-  window.add_key_combo("a", [](Window *window, BufferCursor cursor){
-    std::cout << "Type a" << std::endl;
-  });
+  for (char ch = 'a'; ch <= 'z'; ch++) {
+    window.add_key_combo(std::string(1,ch), [ch](Window *window, BufferCursor& cursor){
+      cursor.insert_text(std::string(1,ch));
+    });   
+  }
+
+  for (char ch = 'A'; ch <= 'Z'; ch++) {
+    window.add_key_combo(std::string(1,ch), [ch](Window *window, BufferCursor& cursor){
+      cursor.insert_text(std::string(1,ch));
+    });   
+  }
+
 
   window.run();
 }

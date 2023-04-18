@@ -125,8 +125,18 @@ void Tester::Benchmarks::benchmark_vec(int seed, int iters) {
                  .count()
             << std::endl;
 }
+
+void Tester::Tests::test_rope_simple() {
+  Rope<int> root;
+  for (int i = 0; i < 20; i++) {
+    root.insert(i,rand()%(i+1));
+  }
+}
+
 void Tester::run_tests() {
   using namespace Tester::Tests;
+  std::cout << "Testing: Simple Rope Test" << std::endl;
+  test_rope_simple();
 
   std::cout << "Testing: Randomised Rope Test" << std::endl;
   test_rope_randomised();

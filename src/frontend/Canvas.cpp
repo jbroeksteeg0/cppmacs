@@ -233,9 +233,8 @@ void Canvas::text_box_write_line(const std::string &text) {
       prefix = std::string(1, text[i]);
     }
   }
-
   for (std::string line : lines) {
-    draw_text(line, m_text_box_x, m_text_box_offset_y, {0.0f, 0.0f, 0.0f});
+    draw_text(line, m_text_box_x, m_text_box_offset_y);
     m_text_box_offset_y -= get_text_dimensions(line).second + m_line_spacing;
   }
 }

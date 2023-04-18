@@ -1,7 +1,8 @@
 #include "BufferCursor.h"
 #include "Buffer.h"
 
-BufferCursor::BufferCursor(Buffer *buffer) : m_buffer(buffer), m_index(0) {}
+BufferCursor::BufferCursor(Buffer *buffer) : m_buffer(buffer), m_index(0) {
+}
 
 void BufferCursor::delete_character_before() {
   if (m_index == 0)

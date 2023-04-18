@@ -12,6 +12,7 @@
 #include <vector>
 
 class BufferManager;
+class InputManager;
 
 class Buffer {
 public:
@@ -19,8 +20,7 @@ public:
   Buffer(std::string file_path);
   ~Buffer();
 
-  // Generate the raw text, run hooks, output
-  std::vector<std::string> get_formatted_text();
+  std::vector<std::string> get_text();
 
   void use_cursor(std::function<void(BufferCursor &)> func
   );    // add to the queue
@@ -38,4 +38,5 @@ private:
   void start_threaded_event_loop();
   friend struct BufferCursor;
   friend class BufferManager;
+  friend class InputManager;
 };

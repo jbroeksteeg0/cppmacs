@@ -40,29 +40,6 @@ Window::Window() {
 
   m_canvas = std::make_shared<Canvas>(this);
   m_input_manager = std::make_unique<InputManager>(this);
-  m_input_manager->add_key_combo(
-    "A B",
-    [](Window *window, BufferCursor cursor) {
-      window->m_frame_tree->create_frame_hsplit(
-        window->m_frame_tree->m_selected, 0.5
-      );
-    }
-  );
-  m_input_manager->add_key_combo(
-    "A C",
-    [](Window *window, BufferCursor cursor) {
-      window->m_frame_tree->create_frame_vsplit(
-        window->m_frame_tree->m_selected, 0.5
-      );
-    }
-  );
-
-  m_input_manager->add_key_combo(
-    "A D",
-    [](Window *window, BufferCursor cursor) {
-      cursor.insert_text("hi");
-    }
-  );
 }
 
 Window::~Window() {
@@ -88,7 +65,7 @@ void Window::run() {
   }
 }
 
-void Window::add_key_combo(std::string combo, std::function<void(Window *window, BufferCursor cursor)> callback) {
+void Window::add_key_combo(std::string combo, std::function<void(Window *window, BufferCursor& cursor)> callback) {
   m_input_manager->add_key_combo(combo, callback);
 }
 

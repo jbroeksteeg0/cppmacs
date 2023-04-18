@@ -29,7 +29,7 @@ void InputManager::press_key(int key_code, int mods) {
 
     if (p.first == m_current_combo) {    // run it
       Buffer* buffer = m_parent->get_active_buffer().get();
-      p.second(m_parent, BufferCursor(buffer));
+      p.second(m_parent, buffer->m_cursor);
       m_current_combo = "";
       return;
     } else if (p.first.substr(0, m_current_combo.size()) == m_current_combo) {    // if a substring
@@ -44,7 +44,7 @@ void InputManager::press_key(int key_code, int mods) {
 
 void InputManager::add_key_combo(
   std::string combo,
-  std::function<void(Window *window, BufferCursor cursor)> function
+  std::function<void(Window *window, BufferCursor& cursor)> function
 ) {
   for (auto iter = m_candidates.begin(); iter != m_candidates.end(); iter++) {
     if (iter->first == combo) {

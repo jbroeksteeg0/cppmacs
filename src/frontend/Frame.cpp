@@ -22,7 +22,11 @@ void Frame::draw() {
   draw_border();
   std::shared_ptr<Canvas> canvas = m_window->get_canvas();
 
-  m_window->get_canvas()->text_box_write_line("Hello World! Hello World! Hello World! Hello World!");
+  m_window->get_canvas()->text_box_init(m_x,m_y,m_width,m_height);
+
+  for (std::string s: m_buffer->get_text()) {
+    m_window->get_canvas()->text_box_write_line(s);
+  }
 }
 
 void Frame::initialise_opengl_data() {

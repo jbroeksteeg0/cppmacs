@@ -7,7 +7,7 @@ class Buffer;
 struct BufferCursor {
 public:
   BufferCursor(Buffer *buffer);
-
+  BufferCursor(const BufferCursor& other) = default;
   void delete_character_before();
   void insert_text(std::string text);
   void insert_newline();
