@@ -189,7 +189,6 @@ private:
   // pass in the parent's ptr to the node
   void rotate_left(std::shared_ptr<Node> *parents_ptr) {
     ASSERT((*parents_ptr)->right != nullptr, "right ptr cannot be null");
-
     Node &oldX = **parents_ptr;
 
     std::shared_ptr<Node> newX = std::make_shared<Node>(
@@ -235,9 +234,7 @@ private:
   // pass in the parent's ptr to the node
   void rotate_right(std::shared_ptr<Node> *parents_ptr) {
     ASSERT((*parents_ptr)->left != nullptr, "left ptr cannot be null");
-
     Node &oldX = **parents_ptr;
-
     std::shared_ptr<Node> newX = std::make_shared<Node>(
       oldX.value,
       oldX.left->right,
@@ -257,14 +254,14 @@ private:
       oldX.left->left,
       newX,
       oldX.parent,
-      oldX.right->prev,
-      oldX.right->succ
+      oldX.left->prev,
+      oldX.left->succ
     );
 
-    if (oldX.right->prev != nullptr)
-      oldX.right->prev->succ = newZ.get();
-    if (oldX.right->succ != nullptr)
-      oldX.right->succ->prev = newZ.get();
+    if (oldX.left->prev != nullptr)
+      oldX.left->prev->succ = newZ.get();
+    if (oldX.left->succ != nullptr)
+      oldX.left->succ->prev = newZ.get();
 
     newX->parent = newZ.get();
 
@@ -291,7 +288,6 @@ private:
 
     const bool z_on_left = x_on_left > x_on_right;
     const int bf = get_balance(*(z_on_left ? old_x->left : old_x->right));
-
     if (!z_on_left && bf >= 0) {
       rotate_left(parents_ptr);
     } else if (z_on_left && bf <= 0) {
