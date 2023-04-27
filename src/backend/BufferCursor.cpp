@@ -103,3 +103,7 @@ void BufferCursor::move_down() {
     m_index = temp_index;
   }
 }
+
+int BufferCursor::get_index() const {
+  return m_index;
+}

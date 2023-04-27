@@ -24,8 +24,16 @@ void Frame::draw() {
 
   m_window->get_canvas()->text_box_init(m_x,m_y,m_width,m_height);
 
+  int cursor_pos = m_buffer->get_cursor_position();
+
   for (std::string s: m_buffer->get_text()) {
-    m_window->get_canvas()->text_box_write_line(s);
+    m_window->get_canvas()->text_box_write_line(s, cursor_pos);
+
+    if (cursor_pos <= s.size()) {
+      cursor_pos = INT_MAX;
+    } else {
+      cursor_pos -= s.size()+1;
+    }
   }
 }
 

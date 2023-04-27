@@ -216,15 +216,17 @@ void Canvas::text_box_init(int x, int y, int width, int height) {
     height - get_text_dimensions(all_chars).second - m_line_spacing;
 }
 
-void Canvas::text_box_write_line(const std::string &text) {
+void Canvas::text_box_write_line(const std::string &text, int cursor_pos) {
   std::string prefix;
   prefix.reserve(text.size());
 
   std::vector<std::string> lines;
 
   for (size_t i = 0; i < text.size(); i++) {
-    prefix += text[i];
+    ASSERT(text[i] != '\n', "Newlines should be handled in the rope");
 
+    prefix += text[i];
+    
     if (i + 1 == text.size()) {    // done
       lines.push_back(prefix);
     } else if (get_text_dimensions(prefix).first > m_text_box_width) {
@@ -233,13 +235,29 @@ void Canvas::text_box_write_line(const std::string &text) {
       prefix = std::string(1, text[i]);
     }
   }
+
+  // Handle newlines
+  if (lines.empty()) {
+    lines = {""};
+  }
+
+  std::string all_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
   for (std::string line : lines) {
     draw_text(line, m_text_box_x, m_text_box_offset_y);
-    m_text_box_offset_y -= get_text_dimensions(line).second + m_line_spacing;
+    if (cursor_pos >= 0 && cursor_pos <= line.size()) {
+      std::string prefix = line.substr(0, cursor_pos);
+
+      draw_rectangle(get_text_dimensions(prefix).first, m_text_box_offset_y, m_cursor_width, get_text_dimensions(all_chars).second);
+    } else {
+      cursor_pos -= line.size();
+    }
+
+    m_text_box_offset_y -= get_text_dimensions(all_chars).second + m_line_spacing;
   }
 }
 
-bool Canvas::text_box_is_finished() {
+bool Canvas::text_box_is_finished() const {
   return m_text_box_offset_y > m_text_box_height;
 }
 
@@ -249,7 +267,9 @@ std::pair<int, int> Canvas::get_text_dimensions(const std::string &text) const {
   for (size_t i = 0; i < text.size(); i++) {
     Character ch = m_characters[(int)text[i]];
 
-    if (i + 1 == text.size()) {
+    if (text[i] == ' ') {
+      width += m_characters['A'].advance >> 6;
+    } else if (i + 1 == text.size()) {
       width += ch.bearing.x + ch.size.x;
     } else {
       width += ch.advance >> 6;

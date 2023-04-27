@@ -54,3 +54,7 @@ void Buffer::start_threaded_event_loop() {
     }
   });
 }
+
+int Buffer::get_cursor_position() const {
+  return m_cursor.get_index();
+}

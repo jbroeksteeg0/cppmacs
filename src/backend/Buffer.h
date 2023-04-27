@@ -25,6 +25,8 @@ public:
   void use_cursor(std::function<void(BufferCursor &)> func
   );    // add to the queue
 
+  int get_cursor_position() const;
+
 private:
   std::optional<std::string> m_file;
   Rope<char> m_rope;

@@ -22,8 +22,10 @@ public:
   void set_ortho_projection(float width, float height);
 
   void text_box_init(int x, int y, int width, int height);
-  void text_box_write_line(const std::string& text);
-  bool text_box_is_finished();
+  void text_box_write_line(const std::string& text, int cursor_pos = INT_MAX);
+
+  bool text_box_is_finished() const;
+  std::pair<int,int> get_text_dimensions(const std::string& text) const;
 private:
   Window *m_ptr;
 
@@ -46,8 +48,8 @@ private:
   int m_text_box_offset_y;
 
   const int m_line_spacing=8;
+  int m_cursor_width = 6;
 private:
   void init_text();
   void init_geometry_buffers();
-  std::pair<int,int> get_text_dimensions(const std::string& text) const;
 };

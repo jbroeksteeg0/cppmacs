@@ -8,12 +8,19 @@ void InputManager::press_key(int key_code, int mods) {
   if (key_code == 340)    // LSHIFT
     return;
 
+  // Alphabet characters (lower/upper)
   if (key_code >= 'A' && key_code <= 'Z') {
-    if (mods & 1) {    // LSHIFT
+    if (mods & 1) {    // left shift
       translated = (char)key_code;
     } else {
       translated = (char)key_code + ('a' - 'A');
     }
+  } else if (key_code == 32) { // space
+    translated = "Space";
+  } else if (key_code == 259) {
+    translated = "Backspace";
+  } else if (key_code == 257) {
+    translated = "Return";
   }
 
   if (!m_current_combo.empty())
