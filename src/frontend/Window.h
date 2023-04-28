@@ -21,6 +21,8 @@ class InputManager;
 
 class Window {
 public:
+  ColorTheme color_theme;
+public:
   Window();
   ~Window();
   void run();

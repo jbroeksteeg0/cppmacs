@@ -9,20 +9,62 @@ void InputManager::press_key(int key_code, int mods) {
     return;
 
   m_parent->get_canvas()->text_box_key_pressed();
-  
-  // Alphabet characters (lower/upper)
+
   if (key_code >= 'A' && key_code <= 'Z') {
-    if (mods & 1) {    // left shift
-      translated = (char)key_code;
-    } else {
-      translated = (char)key_code + ('a' - 'A');
+    key_code -= 'A' - 'a';
+  }
+
+  std::vector<std::pair<char,char>> shift_values = {};
+  for (char ch = 'a'; ch <= 'z'; ch++) {
+    shift_values.push_back({ch, ch + 'A'-'a'});
+  }
+
+  shift_values.push_back({'0',')'});
+  shift_values.push_back({'1','!'});
+  shift_values.push_back({'2','@'});
+  shift_values.push_back({'3','#'});
+  shift_values.push_back({'4','$'});
+  shift_values.push_back({'5','%'});
+  shift_values.push_back({'6','^'});
+  shift_values.push_back({'7','&'});
+  shift_values.push_back({'8','*'});
+  shift_values.push_back({'9','('});
+  shift_values.push_back({'=','+'});
+  shift_values.push_back({'-','_'});
+  shift_values.push_back({'[','{'});
+  shift_values.push_back({']','}'});
+  shift_values.push_back({';',':'});
+  shift_values.push_back({'\'','"'});
+  shift_values.push_back({',','<'});
+  shift_values.push_back({'.','>'});
+  shift_values.push_back({'/','?'});
+  shift_values.push_back({'\\','|'});
+
+  for (auto pair: shift_values) {
+    if (key_code == pair.first && (mods % 2 == 0)) {
+      translated = pair.first;
+      break;
+    } else if (key_code == pair.first && (mods % 2 == 1)) {
+      translated = pair.second;
+      break;
     }
-  } else if (key_code == 32) { // space
+  }
+
+  // Other codes
+  if (key_code == 32) {
     translated = "Space";
   } else if (key_code == 259) {
     translated = "Backspace";
   } else if (key_code == 257) {
     translated = "Return";
+  } else if (key_code == 263) {
+    translated = "Left";
+  } else if (key_code == 265) {
+    translated = "Up";
+  } else if (key_code == 264) {
+    translated = "Down";
+  } else if (key_code == 262) {
+    translated = "Right";
   }
 
   if (!m_current_combo.empty())

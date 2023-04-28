@@ -273,7 +273,9 @@ void Canvas::text_box_init(
 }
 
 void Canvas::text_box_write_line(
-  const std::string &text, int cursor_pos
+  const std::string &text,
+  int cursor_pos,
+  std::array<float, 3> color
 ) {
   std::string prefix;
   prefix.reserve(text.size());
@@ -331,9 +333,9 @@ void Canvas::text_box_write_line(
       if (!cursor_flashing) {
         draw_rectangle(
           get_text_dimensions(prefix).first,
-          m_text_box_offset_y-2,
+          m_text_box_offset_y - 2,
           m_cursor_width,
-          get_text_dimensions(all_chars).second+4
+          get_text_dimensions(all_chars).second + 4
         );
       }
 

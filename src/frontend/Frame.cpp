@@ -19,20 +19,31 @@ void Frame::draw() {
     m_width, m_height
   );
 
+  glClearColor(
+    m_window->color_theme.background[0],
+    m_window->color_theme.background[1],
+    m_window->color_theme.background[2],
+    1.0f
+  );
+
+  glClear(GL_COLOR_BUFFER_BIT);
+
   draw_border();
   std::shared_ptr<Canvas> canvas = m_window->get_canvas();
 
-  m_window->get_canvas()->text_box_init(m_x,m_y,m_width,m_height);
+  canvas->text_box_init(m_x, m_y, m_width, m_height);
 
   int cursor_pos = m_buffer->get_cursor_position();
 
-  for (std::string s: m_buffer->get_text()) {
-    m_window->get_canvas()->text_box_write_line(s, cursor_pos);
+  for (std::string s : m_buffer->get_text()) {
+    canvas->text_box_write_line(
+      s, cursor_pos, m_window->color_theme.text
+    );
 
     if (cursor_pos <= (int)s.size()) {
       cursor_pos = INT_MAX;
     } else {
-      cursor_pos -= s.size()+1;
+      cursor_pos -= s.size() + 1;
     }
   }
 }
@@ -61,7 +72,13 @@ void Frame::draw_border() {
     (float)m_height
   );
 
-  canvas->draw_rectangle(0.0f, (float)m_height - thickness, (float)m_width, thickness);
-  canvas->draw_rectangle(0.0f, 0.0f, (float)m_width, thickness);
-  
+  canvas->draw_rectangle(
+    0.0f,
+    (float)m_height - thickness,
+    (float)m_width,
+    thickness
+  );
+  canvas->draw_rectangle(
+    0.0f, 0.0f, (float)m_width, thickness
+  );
 }

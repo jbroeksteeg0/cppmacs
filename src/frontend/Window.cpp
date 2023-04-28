@@ -34,9 +34,6 @@ Window::Window() {
 
   m_frame_tree =
     std::make_unique<FrameTree>(this, std::make_unique<Frame>(temp, this));
-  // m_frame_tree->create_frame_hsplit(m_frame_tree->m_root.get(), 0.666);
-  //   m_frame_tree->create_frame_vsplit(m_frame_tree->m_root->left.get(),
-  //   0.666);
 
   m_canvas = std::make_shared<Canvas>(this);
   m_input_manager = std::make_unique<InputManager>(this);
@@ -50,7 +47,7 @@ Window::~Window() {
 std::shared_ptr<Canvas> Window::get_canvas() const { return m_canvas; }
 void Window::run() {
   while (!glfwWindowShouldClose(m_window)) {
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     // GET WINDOW WIDTH AND HEIGHT
