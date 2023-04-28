@@ -313,12 +313,7 @@ void Canvas::text_box_write_line(
     if (cursor_pos >= 0 && cursor_pos <= (int)line.size()) {
       std::string prefix = line.substr(0, cursor_pos);
 
-      // decide whether to draw cursor (it flashes)
       using namespace std::chrono;
-      // for calculating whether to flash on/off
-      milliseconds ms = duration_cast<milliseconds>(
-        system_clock::now().time_since_epoch()
-      );
 
       milliseconds time_since_typed =
         duration_cast<milliseconds>(
@@ -330,15 +325,15 @@ void Canvas::text_box_write_line(
       // moment
       bool cursor_flashing =
         m_cursor_flash_duration > 0
-        && (ms.count() % m_cursor_flash_duration < m_cursor_flash_duration / 2)
+        && (time_since_typed.count() % m_cursor_flash_duration < m_cursor_flash_duration / 2)
         && time_since_typed.count() > 500;
 
       if (!cursor_flashing) {
         draw_rectangle(
           get_text_dimensions(prefix).first,
-          m_text_box_offset_y,
+          m_text_box_offset_y-2,
           m_cursor_width,
-          get_text_dimensions(all_chars).second
+          get_text_dimensions(all_chars).second+4
         );
       }
 
