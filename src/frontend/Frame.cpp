@@ -29,7 +29,7 @@ void Frame::draw() {
   for (std::string s: m_buffer->get_text()) {
     m_window->get_canvas()->text_box_write_line(s, cursor_pos);
 
-    if (cursor_pos <= s.size()) {
+    if (cursor_pos <= (int)s.size()) {
       cursor_pos = INT_MAX;
     } else {
       cursor_pos -= s.size()+1;

@@ -8,6 +8,8 @@ void InputManager::press_key(int key_code, int mods) {
   if (key_code == 340)    // LSHIFT
     return;
 
+  m_parent->get_canvas()->text_box_key_pressed();
+  
   // Alphabet characters (lower/upper)
   if (key_code >= 'A' && key_code <= 'Z') {
     if (mods & 1) {    // left shift
