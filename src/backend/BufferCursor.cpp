@@ -42,19 +42,19 @@ void BufferCursor::move_up() {
 
   int temp_index = m_index - 1;
 
-  while (second_prev_newline == -2 && temp_index >= 0
-  ) {    // TODO: optimise out m_rope.at
-    char current_char = m_buffer->m_rope.at(temp_index);
-    if (temp_index == 0 && current_char == '\n' && prev_newline == -2) {
-      prev_newline = 0;
+  while (temp_index >= -1 && second_prev_newline == -2) {
+    if (temp_index == -1 && prev_newline == -2) {
+      break;    // no line before, do nothing
+    } else if (temp_index == -1) {
       second_prev_newline = -1;
-      std::cout << " in here" << std::endl;
-    } else if (current_char == '\n' && prev_newline == -2) {
-      prev_newline = temp_index;
-    } else if (current_char == '\n' && second_prev_newline == -2) {    // if there's a normal newline behind
-      second_prev_newline = temp_index;
-    } else if (temp_index == 0 && prev_newline != -2) {    // can also set the start of the prev line to index -1
-      second_prev_newline = -1;
+    } else {
+      char current_char = m_buffer->m_rope.at(temp_index);
+
+      if (current_char == '\n' && prev_newline == -2) {
+        prev_newline = temp_index;
+      } else if (current_char == '\n' && second_prev_newline == -2) {
+        second_prev_newline = temp_index;
+      }
     }
     temp_index--;
   }
@@ -64,7 +64,7 @@ void BufferCursor::move_up() {
     int new_pos = second_prev_newline + 1;
     int dist = cursor_pos - prev_newline - 1;
 
-    while (dist > 0 && (new_pos <= m_buffer->m_rope.size() || m_buffer->m_rope.at(new_pos) != '\n')) {
+    while (dist > 0 && ((new_pos < (int)m_buffer->m_rope.size() && m_buffer->m_rope.at(new_pos) != '\n') || new_pos == (int)m_buffer->m_rope.size())) {
       new_pos++;
       dist--;
     }
@@ -84,12 +84,12 @@ void BufferCursor::move_down() {
 
   // the next newline
   int start_of_next = m_index;
-  while (start_of_next + 1 < m_buffer->m_rope.size()
+  while (start_of_next + 1 < (int)m_buffer->m_rope.size()
          && m_buffer->m_rope.at(start_of_next) != '\n')
     start_of_next++;
 
   // if there is no newline, return
-  if (start_of_next == m_buffer->m_rope.size() || m_buffer->m_rope.at(start_of_next) != '\n') {
+  if (start_of_next == (int)m_buffer->m_rope.size() || m_buffer->m_rope.at(start_of_next) != '\n') {
     return;
   }
 
@@ -99,8 +99,8 @@ void BufferCursor::move_down() {
 
   while (
     pos_on_line > 0
-    && new_pos < m_buffer->m_rope.size()
-    && (new_pos+1==m_buffer->m_rope.size() || m_buffer->m_rope.at(new_pos) != '\n')
+    && new_pos < (int)m_buffer->m_rope.size()
+    && (new_pos+1==(int)m_buffer->m_rope.size() || m_buffer->m_rope.at(new_pos) != '\n')
   ) {
     pos_on_line--;
     new_pos++;
