@@ -13,7 +13,7 @@ Buffer::~Buffer() {
 
 std::vector<std::string> Buffer::get_text() {
   std::lock_guard<std::mutex> lk(m_queue_mutex); // lock the queue
-
+  
   std::vector<std::string> to_return = {""};
 
   for (const char ch: m_rope) {
@@ -23,7 +23,6 @@ std::vector<std::string> Buffer::get_text() {
       to_return.back().push_back(ch);
     }
   }
-
   return to_return;
 }
 

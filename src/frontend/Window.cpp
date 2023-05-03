@@ -1,5 +1,6 @@
 #include "Window.h"
 #include "../misc/Logger.h"
+#include <GLFW/glfw3.h>
 #include <ft2build.h>
 
 #include FT_FREETYPE_H
@@ -9,7 +10,7 @@ void key_callback(
 ) {
   Window *this_window = (Window *)glfwGetWindowUserPointer(window);
 
-  if (action == GLFW_PRESS)
+  if (action == GLFW_PRESS || action == GLFW_REPEAT)
     this_window->m_input_manager->press_key(key, mods);
 }
 

@@ -310,6 +310,8 @@ void Canvas::text_box_write_line(
   std::string all_chars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
+  bool has_cursor_drawn = false;
+  
   for (std::string line : lines) {
     draw_text(line, m_text_box_x, m_text_box_offset_y);
     if (cursor_pos >= 0 && cursor_pos <= (int)line.size()) {
@@ -330,13 +332,15 @@ void Canvas::text_box_write_line(
         && (time_since_typed.count() % m_cursor_flash_duration < m_cursor_flash_duration / 2)
         && time_since_typed.count() > 500;
 
-      if (!cursor_flashing) {
+      if (!cursor_flashing && !has_cursor_drawn) {
         draw_rectangle(
           get_text_dimensions(prefix).first,
           m_text_box_offset_y - 2,
           m_cursor_width,
           get_text_dimensions(all_chars).second + 4
         );
+
+	has_cursor_drawn = true;
       }
 
     } else {
