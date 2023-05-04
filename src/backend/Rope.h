@@ -71,8 +71,8 @@ public:
 
       rotate_if_necessary(&m_root);
     }
-
     m_size++;
+
   }
 
   void erase(int ind) {
@@ -81,7 +81,7 @@ public:
     );
 
     internal_erase(&m_root, ind);
-
+    
     m_size--;
     if (m_size == 0)
       m_root = nullptr;
@@ -100,7 +100,11 @@ public:
 
     std::stringstream ss;
     ss << "[";
-    ss << intern_to_string(*m_root).str();
+    for (auto iter = begin(); iter != end(); ++iter) {
+      if (iter != begin())
+	ss << ", ";
+      ss << *iter;
+    }
     ss << "]";
     return ss.str();
   }
@@ -118,6 +122,7 @@ public:
       ASSERT(
         current != nullptr, "Cannot increment nullptr"
       );
+
       current = current->succ;
       return *this;
     }
@@ -133,6 +138,7 @@ public:
       ASSERT(
         current != nullptr, "Cannot dereference nullptr"
       );
+
       return current->value;
     }
 
@@ -153,7 +159,8 @@ public:
   Iterator begin() const {
     if (m_root == nullptr)
       return nullptr;
-    return find_node_pointer(&m_root, 0);
+
+    return Iterator(find_node_pointer(&m_root, 0));
   }
   Iterator end() const { return Iterator(nullptr); }
 
@@ -266,6 +273,7 @@ private:
 
     *parents_ptr =
       newZ;    // NOTE: oldX loses validity here, do not use
+
   }
 
   // pass in the parent's ptr to the node
@@ -314,6 +322,7 @@ private:
 
     *parents_ptr =
       newZ;    // NOTE: oldX loses validity here, do not use
+
   }
 
   // pass in the parent's ptr to the node
@@ -434,11 +443,11 @@ private:
       return ptr->value;
     return internal_at(ptr->right, position - on_left - 1);
   }
+
   // pass in the parent's ptr to the node
   void
   internal_erase(std::shared_ptr<Node> *ptr, int position) {
     std::shared_ptr<Node> curr = *ptr;
-
     int on_left =
       curr->left == nullptr ? 0 : curr->left->size;
     if (position < on_left) {
@@ -448,7 +457,7 @@ private:
       Node *newSucc = curr->succ;
       Node *newPrev = curr->prev;
 
-      std::shared_ptr<Node> to_delete = nullptr;
+      std::shared_ptr<Node> replacement_node = nullptr;
 
       // CASE 1: no children, just remove node and things
       // will be updated
@@ -463,33 +472,55 @@ private:
         // CASE 2: both children
         // replace curr with it's successor, delete
         // successor
-
-
-
         std::shared_ptr<Node> *succ_ptr = &curr->right;
         while ((*succ_ptr)->left != nullptr)
           succ_ptr = &(*succ_ptr)->left;
 
         curr->value = (*succ_ptr)->value;
+        curr->succ = (*succ_ptr)->succ; 
 
-        internal_erase(ptr, on_left + 1);
+        // Null the values so when it gets deleted nothing gets updated
+        (*succ_ptr)->prev = nullptr;
+        (*succ_ptr)->succ = nullptr;
+
+        // Delete the first node after (the one used to replace)
+        internal_erase(&((*ptr)->right), 0);
+
       } else if (curr->left != nullptr) {    // CASE 3: only
                                              // left, shift
                                              // up
-        to_delete = curr->left;
+        replacement_node = curr->left;
+
+        if (newSucc != nullptr)
+          newSucc->prev = newPrev;
+        if (newPrev != nullptr)
+          newPrev->succ = newSucc;
       } else {    // CASE 4: only right, shift up
-        to_delete = curr->right;
-      }
+        replacement_node = curr->right;
 
+        if (newSucc != nullptr)
+          newSucc->prev = newPrev;
+        if (newPrev != nullptr)
+          newPrev->succ = newSucc;
+      }
       // make sure to update this before destructors called?
-      if (newSucc != nullptr)
-        newSucc->prev = newPrev;
-      if (newPrev != nullptr)
-        newPrev->succ = newSucc;
 
-      if (to_delete != nullptr) {
-        *ptr = to_delete;
+
+      if (replacement_node != nullptr) {
+        if (replacement_node != curr->left) 
+          replacement_node->left = curr->left;
+        if (replacement_node != curr->right)
+          replacement_node->right  = curr->right;
+        replacement_node->parent = curr->parent;
+        
+        *ptr = replacement_node;
+
+        if (*ptr != nullptr) {
+          rotate_if_necessary(ptr);
+        }
       }
+
+      //update_depth_and_size(**ptr);
     } else {
       ASSERT(
         curr->right != nullptr,
@@ -498,7 +529,12 @@ private:
       internal_erase(
         &(*ptr)->right, position - 1 - on_left
       );
+
+    }
+
+    if (ptr!=nullptr && *ptr != nullptr) {
       rotate_if_necessary(ptr);
     }
+
   }
 };

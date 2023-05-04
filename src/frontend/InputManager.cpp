@@ -79,8 +79,7 @@ void InputManager::press_key(int key_code, int mods) {
       continue;
 
     if (p.first == m_current_combo) {    // run it
-      Buffer* buffer = m_parent->get_active_buffer().get();
-      p.second(m_parent, buffer->m_cursor);
+      m_parent->get_active_buffer()->use_cursor(p.second);
       m_current_combo = "";
       return;
     } else if (p.first.substr(0, m_current_combo.size()) == m_current_combo) {    // if a substring

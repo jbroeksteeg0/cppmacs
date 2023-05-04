@@ -4,6 +4,7 @@ namespace Tester {
 namespace Tests{ 
 void test_rope();
 void test_rope_simple();
+void test_rope_bugged();
 void test_rope_randomised();
 }
 namespace Benchmarks {

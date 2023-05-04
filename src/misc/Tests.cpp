@@ -133,8 +133,31 @@ void Tester::Tests::test_rope_simple() {
   }
 }
 
+void Tester::Tests::test_rope_bugged() {
+  Rope<char> root;
+  root.insert('a',0);
+  std::cout << root.to_string() << std::endl;
+  root.insert('b',1);
+  std::cout << root.to_string() << std::endl;
+  root.insert('c',2);
+  std::cout << root.to_string() << std::endl;
+
+  std::cout << root.to_string() << std::endl;
+
+  root.erase(1);
+
+  std::cout << root.to_string() << std::endl;
+
+  root.erase(0);
+
+  std::cout << root.to_string() << std::endl;
+}
+
 void Tester::run_tests() {
   using namespace Tester::Tests;
+  std::cout << "Testing: Bugged Rope Test" << std::endl;
+  test_rope_bugged();
+
   std::cout << "Testing: Simple Rope Test" << std::endl;
   test_rope_simple();
 

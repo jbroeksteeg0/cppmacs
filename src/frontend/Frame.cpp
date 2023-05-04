@@ -34,7 +34,7 @@ void Frame::draw() {
   canvas->text_box_init(m_x, m_y, m_width, m_height);
 
   int cursor_pos = m_buffer->get_cursor_position();
-
+  
   for (std::string s : m_buffer->get_text()) {
     canvas->text_box_write_line(
       s, cursor_pos, m_window->color_theme.text

@@ -31,13 +31,33 @@ Window::Window() {
     exit(1);
   }
 
-  std::shared_ptr<Buffer> temp = std::make_shared<Buffer>();
+  std::shared_ptr<Buffer> temp = std::make_shared<Buffer>(this);
 
   m_frame_tree =
     std::make_unique<FrameTree>(this, std::make_unique<Frame>(temp, this));
 
   m_canvas = std::make_shared<Canvas>(this);
   m_input_manager = std::make_unique<InputManager>(this);
+
+  /*
+  get_active_buffer()->use_cursor([](Window *w, BufferCursor& cursor){
+    cursor.insert_text("a");
+  });
+  get_active_buffer()->use_cursor([](Window *w, BufferCursor& cursor){
+    cursor.insert_text("b");
+  });
+  get_active_buffer()->use_cursor([](Window *w, BufferCursor& cursor){
+    cursor.insert_text("c");
+  });
+  get_active_buffer()->use_cursor([](Window *w, BufferCursor& cursor){
+    cursor.move_left();
+  });
+  get_active_buffer()->use_cursor([](Window *w, BufferCursor& cursor){
+    cursor.delete_character_before();
+  }); 
+  */
+
+  temp->start_threaded_event_loop();
 }
 
 Window::~Window() {

@@ -10,8 +10,10 @@
 #include <stdio.h>
 #include <thread>
 #include <vector>
+#include <cstdio>
 
 int main() {
+
   SET_LOG_LEVEL(LogLevel::DEBUG);
 
   Window window = Window();
