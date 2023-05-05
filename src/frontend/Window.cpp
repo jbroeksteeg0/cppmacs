@@ -83,6 +83,11 @@ void Window::run() {
   }
 }
 
+void Window::add_key_combos(std::vector<std::string> combos, std::function<void(Window *window, BufferCursor& cursor)> callback) {
+  for (const std::string& s: combos) {
+    add_key_combo(s, callback);
+  }
+}
 void Window::add_key_combo(std::string combo, std::function<void(Window *window, BufferCursor& cursor)> callback) {
   m_input_manager->add_key_combo(combo, callback);
 }
