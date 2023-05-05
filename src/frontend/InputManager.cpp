@@ -41,10 +41,10 @@ void InputManager::press_key(int key_code, int mods) {
   shift_values.push_back({'\\','|'});
 
   for (auto pair: shift_values) {
-    if (key_code == pair.first && (mods % 2 == 0)) {
+    if (key_code == pair.first && (mods & 1) == 0) {
       translated = pair.first;
       break;
-    } else if (key_code == pair.first && (mods % 2 == 1)) {
+    } else if (key_code == pair.first && (mods & 1) == 1) {
       translated = pair.second;
       break;
     }
@@ -65,11 +65,17 @@ void InputManager::press_key(int key_code, int mods) {
     translated = "Down";
   } else if (key_code == 262) {
     translated = "Right";
+  } else if (key_code == 258) {
+    translated = "Tab";
   }
 
   if (!m_current_combo.empty())
     m_current_combo += " ";    // to separate keys
 
+  // If control pressed
+  if (m_current_combo.empty() && (mods & 2)==2) {
+    m_current_combo = "Ctrl ";
+  }
   m_current_combo += translated;
 
   int num_possibilities = 0;
