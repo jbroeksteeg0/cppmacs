@@ -19,11 +19,14 @@ Canvas::Canvas(Window *ptr) : m_ptr(ptr) {
     standard_vertex_shader, standard_fragment_shader
   );
 
-  init_text();
+  for (int i = 0; i < 128; i++) {
+    init_text(i);
+  }
+
   init_geometry_buffers();
 }
 
-void Canvas::init_text() {
+void Canvas::init_text(int size) {
   FT_Library ft;
   FT_Init_FreeType(&ft);
   FT_Face face;
@@ -38,7 +41,7 @@ void Canvas::init_text() {
   }
 
   // set height to 48, width to natural
-  FT_Set_Pixel_Sizes(face, 0, 48);
+  FT_Set_Pixel_Sizes(face, 0, size);
 
   glPixelStorei(
     GL_UNPACK_ALIGNMENT, 1
@@ -81,7 +84,7 @@ void Canvas::init_text() {
       GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR
     );
 
-    m_characters.push_back(
+    m_characters[size].push_back(
       {texture,
        glm::ivec2(
          face->glyph->bitmap.width, face->glyph->bitmap.rows
@@ -122,6 +125,7 @@ void Canvas::draw_text(
   std::string text,
   float x,
   float y,
+  int size,
   std::array<float, 3> color
 ) {
   float scale = 1.0;
@@ -146,7 +150,7 @@ void Canvas::draw_text(
   // iterate through all characters
   std::string::const_iterator c;
   for (c = text.begin(); c != text.end(); c++) {
-    Character ch = m_characters[*c];
+    Character ch = m_characters[size][*c];
 
     float x_pos = x + ch.bearing.x * scale;
     float y_pos = y - (ch.size.y - ch.bearing.y) * scale;
@@ -267,14 +271,13 @@ void Canvas::text_box_init(
 
   // offset = height - max(height of characters)
   std::string all_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  m_text_box_offset_y =
-    height - get_text_dimensions(all_chars).second
-    - m_line_spacing;
+  m_text_box_offset_y = height;
 }
 
 void Canvas::text_box_write_line(
   const std::string &text,
   int cursor_pos,
+  int size,
   std::array<float, 3> color
 ) {
   std::string prefix;
@@ -291,7 +294,7 @@ void Canvas::text_box_write_line(
     prefix += text[i];
 
     // if needs to wrap
-    if (get_text_dimensions(prefix).first + 6 > m_text_box_width) {
+    if (get_text_dimensions(prefix, size).first + 6 > m_text_box_width) {
       prefix.pop_back();
       lines.push_back(prefix);
       prefix = std::string(1, text[i]);
@@ -311,9 +314,15 @@ void Canvas::text_box_write_line(
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
   bool has_cursor_drawn = false;
-  
+
   for (std::string line : lines) {
-    draw_text(line, m_text_box_x, m_text_box_offset_y);
+    m_text_box_offset_y -=
+      get_text_dimensions(all_chars, size).second
+      + m_line_spacing;
+
+    draw_text(
+      line, m_text_box_x, m_text_box_offset_y, size
+    );
     if (cursor_pos >= 0 && cursor_pos <= (int)line.size()) {
       std::string prefix = line.substr(0, cursor_pos);
 
@@ -334,22 +343,18 @@ void Canvas::text_box_write_line(
 
       if (!cursor_flashing && !has_cursor_drawn) {
         draw_rectangle(
-          get_text_dimensions(prefix).first,
+		       get_text_dimensions(prefix,size).first,
           m_text_box_offset_y - 2,
           m_cursor_width,
-          get_text_dimensions(all_chars).second + 4
+		       get_text_dimensions(all_chars,size).second + 4
         );
 
-	has_cursor_drawn = true;
+        has_cursor_drawn = true;
       }
 
     } else {
       cursor_pos -= line.size();
     }
-
-    m_text_box_offset_y -=
-      get_text_dimensions(all_chars).second
-      + m_line_spacing;
   }
 }
 
@@ -357,15 +362,17 @@ bool Canvas::text_box_is_finished() const {
   return m_text_box_offset_y > m_text_box_height;
 }
 
-std::pair<int, int>
-Canvas::get_text_dimensions(const std::string &text) const {
+std::pair<int, int> Canvas::get_text_dimensions(
+  const std::string &text, int size
+) const {
+  // If something of this size has never been used
   int width = 0, height = 0;
 
   for (size_t i = 0; i < text.size(); i++) {
-    Character ch = m_characters[(int)text[i]];
+    Character ch = m_characters.find(size)->second[(int)text[i]];
 
     if (text[i] == ' ') {
-      width += m_characters['A'].advance >> 6;
+      width += m_characters.find(size)->second['A'].advance >> 6;
     } else if (i + 1 == text.size()) {
       width += ch.bearing.x + ch.size.x;
     } else {

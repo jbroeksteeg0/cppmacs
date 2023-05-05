@@ -7,6 +7,7 @@
 #include <vector>
 #include <chrono>
 #include <array>
+#include <map>
 
 class Window;
 
@@ -23,17 +24,18 @@ public:
     std::string text,
     float x,
     float y,
+    int size,
     std::array<float, 3> color = {1.0f,1.0f,1.0f}
   );
   void draw_rectangle(float x, float y, float width, float height);
   void set_ortho_projection(float width, float height);
 
   void text_box_init(int x, int y, int width, int height);
-  void text_box_write_line(const std::string& text, int cursor_pos = INT_MAX, std::array<float, 3> color = {0.0f, 0.0f, 0.0f});
+  void text_box_write_line(const std::string& text, int cursor_pos = INT_MAX, int size=32, std::array<float, 3> color = {0.0f, 0.0f, 0.0f});
   void text_box_key_pressed();
 
   bool text_box_is_finished() const;
-  std::pair<int,int> get_text_dimensions(const std::string& text) const;
+  std::pair<int,int> get_text_dimensions(const std::string& text, int size) const;
 
 private:
   Window *m_ptr;
@@ -45,7 +47,7 @@ private:
     long int
       advance;    // horizontal advance to next origin
   };
-  std::vector<Character> m_characters;
+  std::map<int, std::vector<Character>> m_characters;
 
   // --------- OPENGL
   unsigned int m_text_VAO, m_text_VBO;
@@ -66,6 +68,6 @@ private:
   std::chrono::milliseconds m_time_text_last_modified;
 
 private:
-  void init_text();
+  void init_text(int size);
   void init_geometry_buffers();
 };

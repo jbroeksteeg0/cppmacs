@@ -37,7 +37,7 @@ void Frame::draw() {
   
   for (std::string s : m_buffer->get_text()) {
     canvas->text_box_write_line(
-      s, cursor_pos, m_window->color_theme.text
+				s, cursor_pos, 32, m_window->color_theme.text
     );
 
     if (cursor_pos <= (int)s.size()) {

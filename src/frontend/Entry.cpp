@@ -13,7 +13,6 @@
 #include <cstdio>
 
 int main() {
-
   SET_LOG_LEVEL(LogLevel::DEBUG);
 
   Window window = Window();
@@ -57,6 +56,10 @@ int main() {
       cursor.delete_character_before();
     }
   );
+
+  window.add_key_combo("Tab", [](Window *window, BufferCursor &cursor){
+    cursor.insert_text("  ");
+  });
   window.add_key_combo(
     "Return",
     [](Window *window, BufferCursor &cursor) {
