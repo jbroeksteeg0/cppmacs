@@ -7,11 +7,11 @@ const std::string text_vertex_shader = R"A(
 layout (location = 0) in vec4 vertex; // <vec2 pos, vec2 tex>
 out vec2 TexCoords;
 
-uniform mat4 projection;
+uniform mat4 projections[256];
 
 void main()
 {
-    gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);
+    gl_Position = projections[0] * vec4(vertex.xy, 0.0, 1.0);
     TexCoords = vertex.zw;
 }
 )A";
@@ -34,12 +34,12 @@ void main()
 const std::string standard_vertex_shader = R"A(
 #version 330 core
 in vec2 aPos;
-
-uniform mat4 projection;
+in int ind;
+uniform mat4 projections[256];
 
 void main()
 {
-   gl_Position = projection * vec4(aPos.xy, 0.0, 1.0);
+   gl_Position = projections[0] * vec4(aPos.xy, 0.0, 1.0);
 }
 )A";
 

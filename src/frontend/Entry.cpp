@@ -6,11 +6,52 @@
 #include "Window.h"
 #include "src/backend/BufferCursor.h"
 
+#include <cstdio>
 #include <iostream>
 #include <stdio.h>
 #include <thread>
 #include <vector>
-#include <cstdio>
+
+void delete_word(Window *window, BufferCursor &cursor) {
+  // if at the start of the file, do nothing
+  if (cursor.get_index() == 0)
+    return;
+
+  auto is_num = [](char ch) -> bool {
+    return ch >= '0' && ch <= '9';
+  };
+
+  char char_before =
+    cursor.get_character(cursor.get_index() - 1);
+
+  if (char_before == ' ') {
+    // delete spaces
+    while (cursor.get_index() > 0
+           && cursor.get_character(cursor.get_index() - 1)
+                == ' ') {
+      cursor.delete_character_before();
+    }
+  } else if (isalpha(char_before)) {
+    // delete letters
+    while (cursor.get_index() > 0
+           && isalpha(
+             cursor.get_character(cursor.get_index() - 1)
+           )) {
+      cursor.delete_character_before();
+    }
+  } else if (is_num(char_before)) {
+    // delete numbers
+    while (cursor.get_index() > 0
+           && is_num(
+             cursor.get_character(cursor.get_index() - 1)
+           )) {
+      cursor.delete_character_before();
+    }
+  } else {
+    // delete a single of something else
+    cursor.delete_character_before();
+  }
+}
 
 int main() {
   SET_LOG_LEVEL(LogLevel::DEBUG);
@@ -50,6 +91,7 @@ int main() {
       cursor.insert_text(" ");
     }
   );
+
   window.add_key_combo(
     "Backspace",
     [](Window *window, BufferCursor &cursor) {
@@ -57,44 +99,67 @@ int main() {
     }
   );
 
-  window.add_key_combo("Tab", [](Window *window, BufferCursor &cursor){
-    cursor.insert_text("  ");
-  });
+  // delete word
+  window.add_key_combos(
+    {"Ctrl Backspace", "Ctrl w"}, delete_word
+  );
+
+  window.add_key_combo(
+    "Tab",
+    [](Window *window, BufferCursor &cursor) {
+      cursor.insert_text("  ");
+    }
+  );
   window.add_key_combo(
     "Return",
     [](Window *window, BufferCursor &cursor) {
       cursor.insert_newline();
     }
   );
-
-  window.add_key_combo(
-    "Left",
+  window.add_key_combos(
+    {"Left", "Ctrl h"},
     [](Window *window, BufferCursor &cursor) {
       cursor.move_left();
     }
   );
-  window.add_key_combo(
-    "Right",
+
+  window.add_key_combos(
+    {"Right", "Ctrl l"},
     [](Window *window, BufferCursor &cursor) {
       cursor.move_right();
     }
   );
 
-  window.add_key_combo(
-    "Down",
+  window.add_key_combos(
+    {"Down", "Ctrl j"},
     [](Window *window, BufferCursor &cursor) {
       cursor.move_down();
     }
   );
-  window.add_key_combo(
-    "Up",
+
+  window.add_key_combos(
+    {"Up", "Ctrl k"},
     [](Window *window, BufferCursor &cursor) {
       cursor.move_up();
     }
   );
 
+  window.add_key_combo("Ctrl Space q", [](Window *window, BufferCursor& cursor){
+    window->close();
+  });
+
+  // TODO: this dies lmao
+  window.add_key_combo("Ctrl Space w v", [](Window *window, BufferCursor& cursor){
+    window->vertical_split();
+  });
+  window.add_key_combo("Ctrl Space w f", [](Window *window, BufferCursor& cursor){
+    window->horizontal_split();
+  });
+  
   std::vector<char> symbols = {
-    '!', '@', '#', '$', '%', '^', '&', '*', '(', ')','-','=','_','+','{','}','[',']',':',';','\'','"',',','<','.','>','\\','|','/','?'};
+    '!',  '@', '#', '$', '%', '^', '&',  '*', '(', ')',
+    '-',  '=', '_', '+', '{', '}', '[',  ']', ':', ';',
+    '\'', '"', ',', '<', '.', '>', '\\', '|', '/', '?'};
   for (char ch : symbols) {
     window.add_key_combo(
       std::string(1, ch),

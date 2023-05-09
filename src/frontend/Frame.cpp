@@ -13,25 +13,18 @@ Frame::Frame(std::shared_ptr<Buffer> buffer, Window *parent)
 }
 
 void Frame::draw() {
-  glViewport(m_x, m_y, m_width, m_height);
+  glViewport(m_x,m_y, m_width, m_height);
 
   m_window->get_canvas()->set_ortho_projection(
     m_width, m_height
   );
-
-  glClearColor(
-    m_window->color_theme.background[0],
-    m_window->color_theme.background[1],
-    m_window->color_theme.background[2],
-    1.0f
-  );
-
-  glClear(GL_COLOR_BUFFER_BIT);
-
-  draw_border();
+  
   std::shared_ptr<Canvas> canvas = m_window->get_canvas();
 
-  canvas->text_box_init(m_x, m_y, m_width, m_height);
+  // TODO: add different colours so the background can be drawn
+  //m_window->get_canvas()->draw_rectangle(0, 0, m_width, m_height);
+  draw_border();
+  canvas->text_box_init(0, 0, m_width, m_height);
 
   int cursor_pos = m_buffer->get_cursor_position();
   
@@ -60,7 +53,7 @@ void Frame::initialise_opengl_data() {
 void Frame::draw_border() {
   auto canvas = m_window->get_canvas();
 
-  const float thickness = 1.0f;
+  const float thickness = 2.0f;
 
   canvas->draw_rectangle(
     0.0f, 0.0f, thickness, (float)m_height

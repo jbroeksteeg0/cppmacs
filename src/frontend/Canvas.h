@@ -29,13 +29,14 @@ public:
   );
   void draw_rectangle(float x, float y, float width, float height);
   void set_ortho_projection(float width, float height);
+  void set_matrix_index(size_t index); // TODO: should be private?
 
   void text_box_init(int x, int y, int width, int height);
   void text_box_write_line(const std::string& text, int cursor_pos = INT_MAX, int size=32, std::array<float, 3> color = {0.0f, 0.0f, 0.0f});
   void text_box_key_pressed();
 
   bool text_box_is_finished() const;
-  std::pair<int,int> get_text_dimensions(const std::string& text, int size) const;
+  std::pair<int,int> get_text_dimensions(const std::string& text, int size);
 
 private:
   Window *m_ptr;
@@ -54,6 +55,8 @@ private:
   unsigned int m_rect_VAO, m_rect_VBO;
 
   Program m_text_program, m_geometry_program;
+  glm::mat4 projections[256];
+  size_t m_curr_matrix_index = 0;
 
   // --------- TEXT BOX
   int m_text_box_x, m_text_box_y;
@@ -70,4 +73,6 @@ private:
 private:
   void init_text(int size);
   void init_geometry_buffers();
+
+  friend class Window;
 };

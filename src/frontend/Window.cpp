@@ -1,7 +1,10 @@
 #include "Window.h"
 #include "../misc/Logger.h"
+#include "src/backend/Buffer.h"
+#include "src/frontend/InputManager.h"
 #include <GLFW/glfw3.h>
 #include <ft2build.h>
+#include <memory>
 
 #include FT_FREETYPE_H
 
@@ -30,34 +33,13 @@ Window::Window() {
     printf("%s\n", glewGetErrorString(glewInit()));
     exit(1);
   }
-
-  std::shared_ptr<Buffer> temp = std::make_shared<Buffer>(this);
+ m_buffer_manager = std::make_unique<BufferManager>(this);
 
   m_frame_tree =
-    std::make_unique<FrameTree>(this, std::make_unique<Frame>(temp, this));
-
+    std::make_unique<FrameTree>(this, std::make_unique<Frame>(m_buffer_manager->get_scratch_buffer(), this));
   m_canvas = std::make_shared<Canvas>(this);
+
   m_input_manager = std::make_unique<InputManager>(this);
-
-  /*
-  get_active_buffer()->use_cursor([](Window *w, BufferCursor& cursor){
-    cursor.insert_text("a");
-  });
-  get_active_buffer()->use_cursor([](Window *w, BufferCursor& cursor){
-    cursor.insert_text("b");
-  });
-  get_active_buffer()->use_cursor([](Window *w, BufferCursor& cursor){
-    cursor.insert_text("c");
-  });
-  get_active_buffer()->use_cursor([](Window *w, BufferCursor& cursor){
-    cursor.move_left();
-  });
-  get_active_buffer()->use_cursor([](Window *w, BufferCursor& cursor){
-    cursor.delete_character_before();
-  }); 
-  */
-
-  temp->start_threaded_event_loop();
 }
 
 Window::~Window() {
@@ -74,13 +56,24 @@ void Window::run() {
     // GET WINDOW WIDTH AND HEIGHT
     int window_width, window_height;
     glfwGetWindowSize(m_window, &window_width, &window_height);
-
     m_frame_tree->update_frame_geometry(0, 0, window_width, window_height);
     m_frame_tree->draw_all_frames();
 
     glfwSwapBuffers(m_window);
     glfwPollEvents();
   }
+}
+
+void Window::close() {
+  glfwSetWindowShouldClose(this->m_window, GL_TRUE);
+}
+
+void Window::horizontal_split() {
+  m_frame_tree->create_frame_hsplit(m_frame_tree->m_selected, 0.5);
+}
+
+void Window::vertical_split() {
+  m_frame_tree->create_frame_vsplit(m_frame_tree->m_selected, 0.5);
 }
 
 void Window::add_key_combos(std::vector<std::string> combos, std::function<void(Window *window, BufferCursor& cursor)> callback) {
@@ -94,4 +87,8 @@ void Window::add_key_combo(std::string combo, std::function<void(Window *window,
 
 std::shared_ptr<Buffer> Window::get_active_buffer() {
   return m_frame_tree->m_selected->frame->m_buffer;
+}
+
+void Window::swap_buffers() {
+  glfwSwapBuffers(m_window);
 }

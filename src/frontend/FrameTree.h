@@ -5,6 +5,7 @@
 
 struct Frame;
 class Window;
+class FrameTree;
 
 namespace __FRAMETREE_IMPL {
 
@@ -33,7 +34,7 @@ struct Node {
       : left(std::move(left)), right(std::move(right)), type(type),
         frame(nullptr), split(split) {}
 
-  void draw_all_frames();
+  void draw_all_frames(FrameTree *tree);
   void update_frame_geometry(float x, float y, float width, float height);
 
   friend class FrameTree;
@@ -65,4 +66,5 @@ private:
   std::shared_ptr<Node> m_root;
 
   friend class Window;
+  friend struct __FRAMETREE_IMPL::Node;
 };

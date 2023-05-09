@@ -8,22 +8,24 @@ Program::Program(std::string vertex, std::string fragment)
     : m_vertex(vertex), m_fragment(fragment) {
   // compile vertex
   unsigned int vertex_id = glCreateShader(GL_VERTEX_SHADER);
-
   const char *const vertex_src = m_vertex.c_str();
+
   glShaderSource(vertex_id, 1, &vertex_src, nullptr);
   glCompileShader(vertex_id);
 
-  int success;
-  char err[512];
+  int success = 1;
+  char err[1024] = {' '};
   glGetShaderiv(vertex_id, GL_COMPILE_STATUS, &success);
+
   if (!success) {
-    glGetShaderInfoLog(vertex_id, 512, NULL, err);
+    glGetShaderInfoLog(vertex_id, 1024, NULL, err);
     ERROR(err);
     exit(1);
   }
 
   // compile fragment
   unsigned int fragment_id = glCreateShader(GL_FRAGMENT_SHADER);
+
   const char *const fragment_src = m_fragment.c_str();
   glShaderSource(fragment_id, 1, &fragment_src, nullptr);
   glCompileShader(fragment_id);

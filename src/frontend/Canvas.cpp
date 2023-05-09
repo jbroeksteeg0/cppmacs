@@ -19,10 +19,6 @@ Canvas::Canvas(Window *ptr) : m_ptr(ptr) {
     standard_vertex_shader, standard_fragment_shader
   );
 
-  for (int i = 0; i < 128; i++) {
-    init_text(i);
-  }
-
   init_geometry_buffers();
 }
 
@@ -128,12 +124,16 @@ void Canvas::draw_text(
   int size,
   std::array<float, 3> color
 ) {
+  if (m_characters[size].empty())
+    init_text(size);
+
   float scale = 1.0;
 
   // activate corresponding render state
   m_text_program.use();
 
   // set the color of the text
+  // TODO: doesn't work lmao
   glUniform3f(
     glGetUniformLocation(
       m_text_program.get_program(), "textColor"
@@ -195,28 +195,31 @@ void Canvas::draw_text(
 void Canvas::set_ortho_projection(
   float width, float height
 ) {
-  glm::mat4 projection =
+  projections[0] =
     glm::ortho(0.0f, width, 0.0f, height);
 
   m_text_program.use();
   glUniformMatrix4fv(
     glGetUniformLocation(
-      m_text_program.get_program(), "projection"
+      m_text_program.get_program(), "projections"
     ),
-    1,
+    256,
     GL_FALSE,
-    glm::value_ptr(projection)
+    glm::value_ptr(projections[0])
   );
 
   m_geometry_program.use();
   glUniformMatrix4fv(
     glGetUniformLocation(
-      m_geometry_program.get_program(), "projection"
+      m_geometry_program.get_program(), "projections"
     ),
     1,
     GL_FALSE,
-    glm::value_ptr(projection)
+    glm::value_ptr(projections[0])
   );
+
+  m_curr_matrix_index ++;
+  m_curr_matrix_index %= 256;
 }
 
 void Canvas::init_geometry_buffers() {
@@ -227,20 +230,27 @@ void Canvas::init_geometry_buffers() {
 void Canvas::draw_rectangle(
   float x, float y, float width, float height
 ) {
-  float vertices[12] = {
+
+  float vertices[18] = {
     x,
     y,
+    (float)m_curr_matrix_index,
     x + width,
     y,
+    (float)m_curr_matrix_index,
     x + width,
     y + height,
+    (float)m_curr_matrix_index,
 
     x + width,
     y + height,
+    (float)m_curr_matrix_index,
     x,
     y + height,
+    (float)m_curr_matrix_index,
     x,
-    y};
+    y,
+    (float)m_curr_matrix_index};
 
   glBindBuffer(GL_ARRAY_BUFFER, this->m_rect_VBO);
   glBufferData(
@@ -251,11 +261,17 @@ void Canvas::draw_rectangle(
   );
 
   glBindVertexArray(this->m_rect_VAO);
+
   glVertexAttribPointer(
-    0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void *)0
+    0, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0
   );
+  glVertexAttribPointer(
+    1, 1, GL_INT, GL_FALSE, 3 * sizeof(float), 0
+  );
+
   m_geometry_program.use();
   glEnableVertexAttribArray(0);
+  glEnableVertexAttribArray(1);
 
   glDrawArrays(GL_TRIANGLES, 0, 6);
 }
@@ -343,10 +359,10 @@ void Canvas::text_box_write_line(
 
       if (!cursor_flashing && !has_cursor_drawn) {
         draw_rectangle(
-		       get_text_dimensions(prefix,size).first,
+          get_text_dimensions(prefix, size).first,
           m_text_box_offset_y - 2,
           m_cursor_width,
-		       get_text_dimensions(all_chars,size).second + 4
+          get_text_dimensions(all_chars, size).second + 4
         );
 
         has_cursor_drawn = true;
@@ -364,15 +380,21 @@ bool Canvas::text_box_is_finished() const {
 
 std::pair<int, int> Canvas::get_text_dimensions(
   const std::string &text, int size
-) const {
+) {
+  // Initialise the textures for all the characters if they
+  // don't already exist
+  if (m_characters[size].empty()) {
+    init_text(size);
+  }
+
   // If something of this size has never been used
   int width = 0, height = 0;
 
   for (size_t i = 0; i < text.size(); i++) {
-    Character ch = m_characters.find(size)->second[(int)text[i]];
+    Character ch = m_characters[size][(int)text[i]];
 
     if (text[i] == ' ') {
-      width += m_characters.find(size)->second['A'].advance >> 6;
+      width += m_characters[size]['A'].advance >> 6;
     } else if (i + 1 == text.size()) {
       width += ch.bearing.x + ch.size.x;
     } else {
@@ -389,4 +411,8 @@ void Canvas::text_box_key_pressed() {
     std::chrono::duration_cast<std::chrono::milliseconds>(
       std::chrono::system_clock::now().time_since_epoch()
     );
+}
+
+void Canvas::set_matrix_index(size_t index) {
+  m_curr_matrix_index = index;
 }
