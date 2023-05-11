@@ -1,5 +1,6 @@
 #include "BufferCursor.h"
 #include "Buffer.h"
+#include "src/misc/Util.h"
 
 BufferCursor::BufferCursor(Buffer *buffer)
     : m_buffer(buffer), m_index(0) {}
@@ -110,3 +111,9 @@ void BufferCursor::move_down() {
 }
 
 int BufferCursor::get_index() const { return m_index; }
+
+char BufferCursor::get_character(int index) const {
+  ASSERT(index >= 0 && index <= (int)m_buffer->m_rope.size(), "Index not in bounds");
+
+  return m_buffer->m_rope.at(index);
+}

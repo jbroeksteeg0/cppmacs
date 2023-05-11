@@ -1,4 +1,5 @@
 #include "FrameTree.h"
+#include "src/frontend/Frame.h"
 
 void __FRAMETREE_IMPL::Node::draw_all_frames(FrameTree *tree
 ) {
@@ -38,6 +39,15 @@ void __FRAMETREE_IMPL::Node::update_frame_geometry(
   }
 }
 
+void __FRAMETREE_IMPL::Node::get_all_leaves(std::vector<Node*>& output) {
+  if (type == Type::FRAME) {
+    output.push_back(this);
+  } else {
+    left->get_all_leaves(output);
+    right->get_all_leaves(output);
+  }
+}
+
 void FrameTree::draw_all_frames() {
   m_root->draw_all_frames(this);
 }
@@ -47,6 +57,8 @@ void FrameTree::update_frame_geometry(
 ) {
   m_root->update_frame_geometry(x, y, width, height);
 }
+
+
 
 FrameTree::FrameTree(
   Window *parent, std::unique_ptr<Frame> root_frame
@@ -91,6 +103,11 @@ void FrameTree::create_frame_vsplit(Node *at, float split) {
 
   if (reset_selected) {
     m_selected = at->left.get();
-    std::cout << "Selected is " << m_selected << std::endl;
   }
+}
+
+std::vector<__FRAMETREE_IMPL::Node*> FrameTree::get_all_frames() {
+  std::vector<__FRAMETREE_IMPL::Node*> ret;
+  m_root->get_all_leaves(ret);
+  return ret;
 }

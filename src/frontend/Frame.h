@@ -1,12 +1,14 @@
 #pragma once
 
 #include "../backend/Buffer.h"
+#include "../backend/BufferManager.h"
 #include "FrameTree.h"
 #include "Program.h"
 #include "Window.h"
 #include <memory>
 
 class Window;
+
 namespace __FRAMETREE_IMPL {
 struct Node;
 };
@@ -16,7 +18,7 @@ struct Frame {
   Frame(std::shared_ptr<Buffer> buffer, Window *parent);
 
   void draw();
-
+  void load_file(std::string name);
 private:
   Window *m_window;
   std::shared_ptr<Buffer> m_buffer;

@@ -8,29 +8,38 @@ Frame::Frame(Window *parent) : m_window(parent) {
 Frame::Frame(std::shared_ptr<Buffer> buffer, Window *parent)
     : m_window(parent), m_buffer(buffer) {
   glViewport(m_x, m_y, m_width, m_height);
+  m_buffer->m_current_frame = this;
 
   initialise_opengl_data();
 }
 
+void Frame::load_file(std::string name) {
+  m_buffer =
+    m_window->m_buffer_manager->get_files_buffer(name);
+  m_buffer->m_current_frame = this;
+}
+
 void Frame::draw() {
-  glViewport(m_x,m_y, m_width, m_height);
+  glViewport(m_x, m_y, m_width, m_height);
 
   m_window->get_canvas()->set_ortho_projection(
     m_width, m_height
   );
-  
+
   std::shared_ptr<Canvas> canvas = m_window->get_canvas();
 
-  // TODO: add different colours so the background can be drawn
-  //m_window->get_canvas()->draw_rectangle(0, 0, m_width, m_height);
+  // TODO: add different colours so the background can be
+  // drawn
+  // m_window->get_canvas()->draw_rectangle(0, 0, m_width,
+  // m_height);
   draw_border();
   canvas->text_box_init(0, 0, m_width, m_height);
 
   int cursor_pos = m_buffer->get_cursor_position();
-  
+
   for (std::string s : m_buffer->get_text()) {
     canvas->text_box_write_line(
-				s, cursor_pos, 32, m_window->color_theme.text
+      s, cursor_pos, 32, m_window->color_theme.text
     );
 
     if (cursor_pos <= (int)s.size()) {

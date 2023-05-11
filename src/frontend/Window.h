@@ -1,17 +1,18 @@
 #pragma once
+#include "./InputManager.h"
+#include "Frame.h"
 #include "Canvas.h"
 #include "Frame.h"
 #include "FrameTree.h"
 #include "Program.h"
 #include "Shaders.h"
+#include "src/backend/Buffer.h"
+#include "src/backend/BufferManager.h"
 #include <GL/gl.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <array>
 #include <glm/ext.hpp>
-#include "./InputManager.h"
-#include "src/backend/Buffer.h"
-#include "src/backend/BufferManager.h"
 #include <glm/glm.hpp>
 #include <iostream>
 #include <memory>
@@ -25,6 +26,7 @@ class BufferManager;
 class Window {
 public:
   ColorTheme color_theme;
+
 public:
   Window();
   ~Window();
@@ -32,10 +34,25 @@ public:
   void close();
   void horizontal_split();
   void vertical_split();
+  void change_selected_buffer_up();
+  void change_selected_buffer_down();
+  void change_selected_buffer_left();
+  void change_selected_buffer_right();
 
   std::shared_ptr<Canvas> get_canvas() const;
-  void add_key_combo(std::string combo, std::function<void(Window *window, BufferCursor& cursor)> callback);
-  void add_key_combos(std::vector<std::string> combos, std::function<void(Window *window, BufferCursor& cursor)> callback);
+  void add_key_combo(
+    std::string combo,
+    std::function<void(
+      Window *window, BufferCursor &cursor, Frame *frame
+    )> callback
+  );
+  void add_key_combos(
+    std::vector<std::string> combos,
+    std::function<void(
+      Window *window, BufferCursor &cursor, Frame *frame
+    )> callback
+  );
+
 private:
   GLFWwindow *m_window;
 
@@ -45,10 +62,18 @@ private:
   std::shared_ptr<Canvas> m_canvas;
 
   int m_width, m_height;
+
 private:
   std::shared_ptr<Buffer> get_active_buffer();
   void swap_buffers();
-  friend void key_callback(GLFWwindow *window, int key, int scan_code, int action, int mods);
+  friend void key_callback(
+    GLFWwindow *window,
+    int key,
+    int scan_code,
+    int action,
+    int mods
+  );
   friend class InputManager;
-  friend class Frame;
+  friend struct Frame;
+  friend class Buffer;
 };

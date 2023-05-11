@@ -18,6 +18,7 @@ public:
   void move_down();
 
   int get_index() const;
+  char get_character(int index) const;
 private:
   Buffer *m_buffer;
   int m_index;

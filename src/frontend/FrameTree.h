@@ -40,6 +40,7 @@ struct Node {
   friend class FrameTree;
 
   void draw_and_recurse();
+  void get_all_leaves(std::vector<Node*>& output);
   void update_dimensions(int x, int y, int width, int height);
 };
 
@@ -60,6 +61,7 @@ public:
   void draw_all_frames();
   void update_frame_geometry(float x, float y, float width, float height);
 
+  std::vector<Node*> get_all_frames();
 private:
   Window *m_window;
   Node *m_selected;
@@ -67,4 +69,5 @@ private:
 
   friend class Window;
   friend struct __FRAMETREE_IMPL::Node;
+  friend class Buffer;
 };

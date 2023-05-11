@@ -100,7 +100,7 @@ void InputManager::press_key(int key_code, int mods) {
 
 void InputManager::add_key_combo(
   std::string combo,
-  std::function<void(Window *window, BufferCursor& cursor)> function
+  std::function<void(Window *window, BufferCursor& cursor, Frame* frame)> function
 ) {
   for (auto iter = m_candidates.begin(); iter != m_candidates.end(); iter++) {
     if (iter->first == combo) {

@@ -2,6 +2,7 @@
 #include "BufferCursor.h"
 #include "Module.h"
 #include "Rope.h"
+#include <filesystem>
 #include <functional>
 #include <iostream>
 #include <memory>
@@ -10,9 +11,11 @@
 #include <queue>
 #include <thread>
 #include <vector>
+#include "../frontend/Frame.h"
 
 class BufferManager;
 class InputManager;
+struct Frame;
 class Window;
 
 class Buffer {
@@ -23,23 +26,31 @@ public:
 
   std::vector<std::string> get_text();
 
-  void use_cursor(std::function<void(Window *w, BufferCursor &)> func
-  );    // add to the queue
+  void use_cursor(
+    std::function<void(Window *, BufferCursor &, Frame *)>
+      func
+  );
 
   int get_cursor_position() const;
 
-  void start_threaded_event_loop();
 private:
-  std::optional<std::string> m_file;
+  std::optional<std::filesystem::path> m_file;
   Rope<char> m_rope;
   BufferCursor m_cursor;
-  
+
   std::thread m_thread;
   std::mutex m_queue_mutex;
-  std::queue<std::function<void(Window* w, BufferCursor &)>> m_event_queue;
+  std::atomic_bool m_should_close = false;
+  std::queue<
+    std::function<void(Window *w, BufferCursor &, Frame *)>>
+    m_event_queue;
   Window *m_parent;
+  Frame *m_current_frame = nullptr;
 private:
+  void start_threaded_event_loop();
+
   friend struct BufferCursor;
+  friend struct Frame;
   friend class BufferManager;
   friend class InputManager;
 };
