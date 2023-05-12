@@ -32,7 +32,7 @@ void Frame::draw() {
   // drawn
   // m_window->get_canvas()->draw_rectangle(0, 0, m_width,
   // m_height);
-  draw_border();
+  draw_border(this == m_window->m_frame_tree->m_selected->frame.get());
   canvas->text_box_init(0, 0, m_width, m_height);
 
   int cursor_pos = m_buffer->get_cursor_position();
@@ -59,10 +59,10 @@ void Frame::initialise_opengl_data() {
   );
 }
 
-void Frame::draw_border() {
+void Frame::draw_border(bool is_selected) {
   auto canvas = m_window->get_canvas();
 
-  const float thickness = 2.0f;
+  const float thickness = 2.0f * (is_selected ? 3.0f : 1.0f);
 
   canvas->draw_rectangle(
     0.0f, 0.0f, thickness, (float)m_height
