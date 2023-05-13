@@ -12,7 +12,7 @@ Buffer::Buffer(Window *parent)
 Buffer::Buffer(std::string file_path, Window *parent)
     : m_rope(Rope<char>()), m_cursor(BufferCursor(this)),
       m_parent(parent) {
-  try_open_path(file_path);
+  open_path(file_path);
   start_threaded_event_loop();
 }
 

@@ -253,7 +253,7 @@ void Window::process_minibuffer_command(std::string command) {
     if (command.size() <= 2 || command[1] != ' ') {
       LOG("Error: must provide file path with after 'e'");
     }
-    get_active_buffer()->try_open_path(command.substr(2, command.size() - 2));
+    get_active_buffer()->open_path(command.substr(2, command.size() - 2));
   } else {
     LOG("Cannot parse command '" + command + "'");
   }

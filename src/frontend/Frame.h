@@ -33,7 +33,7 @@ private:
 
 private:
   void initialise_opengl_data();
-  void draw_border();
+  void draw_border(bool is_selected = false);
 
   friend class FrameTree;
   friend class InputManager;

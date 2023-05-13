@@ -70,4 +70,5 @@ private:
   friend class Window;
   friend struct __FRAMETREE_IMPL::Node;
   friend class Buffer;
+  friend struct Frame;
 };
