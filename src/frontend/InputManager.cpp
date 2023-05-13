@@ -14,33 +14,33 @@ void InputManager::press_key(int key_code, int mods) {
     key_code -= 'A' - 'a';
   }
 
-  std::vector<std::pair<char,char>> shift_values = {};
+  std::vector<std::pair<char, char>> shift_values = {};
   for (char ch = 'a'; ch <= 'z'; ch++) {
-    shift_values.push_back({ch, ch + 'A'-'a'});
+    shift_values.push_back({ch, ch + 'A' - 'a'});
   }
 
-  shift_values.push_back({'0',')'});
-  shift_values.push_back({'1','!'});
-  shift_values.push_back({'2','@'});
-  shift_values.push_back({'3','#'});
-  shift_values.push_back({'4','$'});
-  shift_values.push_back({'5','%'});
-  shift_values.push_back({'6','^'});
-  shift_values.push_back({'7','&'});
-  shift_values.push_back({'8','*'});
-  shift_values.push_back({'9','('});
-  shift_values.push_back({'=','+'});
-  shift_values.push_back({'-','_'});
-  shift_values.push_back({'[','{'});
-  shift_values.push_back({']','}'});
-  shift_values.push_back({';',':'});
-  shift_values.push_back({'\'','"'});
-  shift_values.push_back({',','<'});
-  shift_values.push_back({'.','>'});
-  shift_values.push_back({'/','?'});
-  shift_values.push_back({'\\','|'});
+  shift_values.push_back({'0', ')'});
+  shift_values.push_back({'1', '!'});
+  shift_values.push_back({'2', '@'});
+  shift_values.push_back({'3', '#'});
+  shift_values.push_back({'4', '$'});
+  shift_values.push_back({'5', '%'});
+  shift_values.push_back({'6', '^'});
+  shift_values.push_back({'7', '&'});
+  shift_values.push_back({'8', '*'});
+  shift_values.push_back({'9', '('});
+  shift_values.push_back({'=', '+'});
+  shift_values.push_back({'-', '_'});
+  shift_values.push_back({'[', '{'});
+  shift_values.push_back({']', '}'});
+  shift_values.push_back({';', ':'});
+  shift_values.push_back({'\'', '"'});
+  shift_values.push_back({',', '<'});
+  shift_values.push_back({'.', '>'});
+  shift_values.push_back({'/', '?'});
+  shift_values.push_back({'\\', '|'});
 
-  for (auto pair: shift_values) {
+  for (auto pair : shift_values) {
     if (key_code == pair.first && (mods & 1) == 0) {
       translated = pair.first;
       break;
@@ -73,7 +73,7 @@ void InputManager::press_key(int key_code, int mods) {
     m_current_combo += " ";    // to separate keys
 
   // If control pressed
-  if (m_current_combo.empty() && (mods & 2)==2) {
+  if (m_current_combo.empty() && (mods & 2) == 2) {
     m_current_combo = "Ctrl ";
   }
   m_current_combo += translated;
@@ -100,7 +100,8 @@ void InputManager::press_key(int key_code, int mods) {
 
 void InputManager::add_key_combo(
   std::string combo,
-  std::function<void(Window *window, BufferCursor& cursor, Frame* frame)> function
+  std::function<void(Window *window, BufferCursor &cursor, Frame *frame)>
+    function
 ) {
   for (auto iter = m_candidates.begin(); iter != m_candidates.end(); iter++) {
     if (iter->first == combo) {

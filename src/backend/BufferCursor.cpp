@@ -117,3 +117,19 @@ char BufferCursor::get_character(int index) const {
 
   return m_buffer->m_rope.at(index);
 }
+
+bool BufferCursor::in_minibuffer() const {
+  return m_buffer->is_minibuffer();
+}
+
+void BufferCursor::minibuffer_return() {
+  return m_buffer->m_parent->minibuffer_return();
+}
+
+void BufferCursor::set_text(std::string text) {
+  while (m_buffer->m_rope.size() > 0) {
+    m_buffer->m_rope.erase(0);
+  }
+  insert_text(text);
+  m_index = text.size();
+}

@@ -12,23 +12,7 @@ Buffer::Buffer(Window *parent)
 Buffer::Buffer(std::string file_path, Window *parent)
     : m_rope(Rope<char>()), m_cursor(BufferCursor(this)),
       m_parent(parent) {
-  std::filesystem::path path = file_path;
-
-  path = std::filesystem::canonical(path);
-
-  // TODO: can't create files
-  if (!std::filesystem::exists(path) || !path.has_filename()) {
-    LOG("Invalid path: " + path.string());
-  } else {
-    m_file = {path};
-
-    std::ifstream in(file_path);
-    char ch;
-    while (in >> ch) {
-      m_rope.insert(ch, m_rope.size());
-    }
-  }
-
+  try_open_path(file_path);
   start_threaded_event_loop();
 }
 
@@ -84,6 +68,44 @@ void Buffer::start_threaded_event_loop() {
   });
 }
 
+void Buffer::save() {
+  if (auto path = m_file) {
+    std::ofstream out(path->string());
+
+    for (std::string line: get_text()) {
+      out << line << "\n";
+    }
+  }
+}
+
+void Buffer::open_path(std::string file_path) {
+  std::filesystem::path path = file_path;
+
+  if (!std::filesystem::exists(path)) {
+    LOG("Path does not exist: " + path.string());
+    return;
+  }
+
+  // Resolve dots etc
+  path = std::filesystem::canonical(path);
+
+  // Set the member variable
+  m_file = path;
+
+  // Clear the original content
+  
+  // Load the file
+  std::ifstream in(path.string());
+  std::string temp;
+  while (std::getline(in, temp)) {
+    
+  }
+}
+
 int Buffer::get_cursor_position() const {
   return m_cursor.get_index();
+}
+
+bool Buffer::is_minibuffer() const {
+  return m_parent->in_minibuffer() && this == m_parent->get_active_buffer().get();
 }

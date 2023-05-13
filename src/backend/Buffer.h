@@ -31,8 +31,11 @@ public:
       func
   );
 
-  int get_cursor_position() const;
+  void save();
+  void open_path(std::string file_path);
 
+  int get_cursor_position() const;
+  bool is_minibuffer() const;
 private:
   std::optional<std::filesystem::path> m_file;
   Rope<char> m_rope;

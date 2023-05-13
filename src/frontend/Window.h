@@ -39,7 +39,6 @@ public:
   void change_selected_buffer_left();
   void change_selected_buffer_right();
 
-  std::shared_ptr<Canvas> get_canvas() const;
   void add_key_combo(
     std::string combo,
     std::function<void(
@@ -53,6 +52,11 @@ public:
     )> callback
   );
 
+  void open_minibuffer();
+  void minibuffer_return();
+  void process_minibuffer_command(std::string command);
+  bool in_minibuffer() const;
+  std::shared_ptr<Canvas> get_canvas() const;
 private:
   GLFWwindow *m_window;
 
@@ -63,6 +67,8 @@ private:
 
   int m_width, m_height;
 
+  bool m_in_minibuffer = false;
+  std::unique_ptr<Frame> m_minibuffer;
 private:
   std::shared_ptr<Buffer> get_active_buffer();
   void swap_buffers();

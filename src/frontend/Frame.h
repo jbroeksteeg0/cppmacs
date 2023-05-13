@@ -19,6 +19,7 @@ struct Frame {
 
   void draw();
   void load_file(std::string name);
+
 private:
   Window *m_window;
   std::shared_ptr<Buffer> m_buffer;
@@ -26,7 +27,7 @@ private:
   Program m_shader;
 
   size_t m_text_start_ind;
-  
+
   unsigned int m_border_vbo;
   unsigned int m_border_vao;
 
