@@ -75,6 +75,8 @@ void Buffer::save() {
     for (std::string line: get_text()) {
       out << line << "\n";
     }
+  } else {
+    LOG("Cannot save: buffer has no file");
   }
 }
 

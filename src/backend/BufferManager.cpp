@@ -30,6 +30,8 @@ BufferManager::get_files_buffer(std::string file_name) {
     std::make_shared<Buffer>(file_name, m_window)
   );
 
+  m_buffers.back()->m_file = file_name;
+
   // Return it
   return m_buffers.back();
 }

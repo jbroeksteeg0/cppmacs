@@ -11,9 +11,14 @@
 #include FT_FREETYPE_H
 
 void key_callback(
-  GLFWwindow *window, int key, int scan_code, int action, int mods
+  GLFWwindow *window,
+  int key,
+  int scan_code,
+  int action,
+  int mods
 ) {
-  Window *this_window = (Window *)glfwGetWindowUserPointer(window);
+  Window *this_window =
+    (Window *)glfwGetWindowUserPointer(window);
 
   if (action == GLFW_PRESS || action == GLFW_REPEAT)
     this_window->m_input_manager->press_key(key, mods);
@@ -22,7 +27,8 @@ void key_callback(
 Window::Window() {
   glfwInit();
 
-  m_window = glfwCreateWindow(800, 600, "window", nullptr, nullptr);
+  m_window =
+    glfwCreateWindow(800, 600, "window", nullptr, nullptr);
   m_width = 800;
   m_height = 600;
 
@@ -38,13 +44,18 @@ Window::Window() {
   m_buffer_manager = std::make_unique<BufferManager>(this);
 
   m_frame_tree = std::make_unique<FrameTree>(
-    this, std::make_unique<Frame>(m_buffer_manager->get_scratch_buffer(), this)
+    this,
+    std::make_unique<Frame>(
+      m_buffer_manager->get_scratch_buffer(), this
+    )
   );
   m_canvas = std::make_shared<Canvas>(this);
 
   m_input_manager = std::make_unique<InputManager>(this);
 
-  m_minibuffer = std::make_unique<Frame>(std::make_shared<Buffer>(this), this);
+  m_minibuffer = std::make_unique<Frame>(
+    std::make_shared<Buffer>(this), this
+  );
 }
 
 Window::~Window() {
@@ -52,7 +63,9 @@ Window::~Window() {
   glfwTerminate();
 }
 
-std::shared_ptr<Canvas> Window::get_canvas() const { return m_canvas; }
+std::shared_ptr<Canvas> Window::get_canvas() const {
+  return m_canvas;
+}
 void Window::run() {
   while (!glfwWindowShouldClose(m_window)) {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -60,13 +73,17 @@ void Window::run() {
 
     // GET WINDOW WIDTH AND HEIGHT
     int window_width, window_height;
-    glfwGetWindowSize(m_window, &window_width, &window_height);
+    glfwGetWindowSize(
+      m_window, &window_width, &window_height
+    );
     if (m_in_minibuffer) {
       m_frame_tree->update_frame_geometry(
         0, 32, window_width, window_height - 32
       );
     } else {
-      m_frame_tree->update_frame_geometry(0, 0, window_width, window_height);
+      m_frame_tree->update_frame_geometry(
+        0, 0, window_width, window_height
+      );
     }
     m_frame_tree->draw_all_frames();
 
@@ -83,21 +100,29 @@ void Window::run() {
   }
 }
 
-void Window::close() { glfwSetWindowShouldClose(this->m_window, GL_TRUE); }
+void Window::close() {
+  glfwSetWindowShouldClose(this->m_window, GL_TRUE);
+}
 
 void Window::horizontal_split() {
-  m_frame_tree->create_frame_hsplit(m_frame_tree->m_selected, 0.5);
+  m_frame_tree->create_frame_hsplit(
+    m_frame_tree->m_selected, 0.5
+  );
 }
 
 void Window::vertical_split() {
-  m_frame_tree->create_frame_vsplit(m_frame_tree->m_selected, 0.5);
+  m_frame_tree->create_frame_vsplit(
+    m_frame_tree->m_selected, 0.5
+  );
 }
 
 void Window::change_selected_buffer_up() {
   using namespace __FRAMETREE_IMPL;
-  std::vector<Node *> all_frames = m_frame_tree->get_all_frames();
+  std::vector<Node *> all_frames =
+    m_frame_tree->get_all_frames();
 
-  Node *take = nullptr, *selected = m_frame_tree->m_selected;
+  Node *take = nullptr,
+       *selected = m_frame_tree->m_selected;
 
   for (Node *node : all_frames) {
     // If the node is in correct position
@@ -117,9 +142,11 @@ void Window::change_selected_buffer_up() {
 }
 void Window::change_selected_buffer_down() {
   using namespace __FRAMETREE_IMPL;
-  std::vector<Node *> all_frames = m_frame_tree->get_all_frames();
+  std::vector<Node *> all_frames =
+    m_frame_tree->get_all_frames();
 
-  Node *take = nullptr, *selected = m_frame_tree->m_selected;
+  Node *take = nullptr,
+       *selected = m_frame_tree->m_selected;
 
   for (Node *node : all_frames) {
     if (node == selected)
@@ -142,9 +169,11 @@ void Window::change_selected_buffer_down() {
 
 void Window::change_selected_buffer_left() {
   using namespace __FRAMETREE_IMPL;
-  std::vector<Node *> all_frames = m_frame_tree->get_all_frames();
+  std::vector<Node *> all_frames =
+    m_frame_tree->get_all_frames();
 
-  Node *take = nullptr, *selected = m_frame_tree->m_selected;
+  Node *take = nullptr,
+       *selected = m_frame_tree->m_selected;
 
   for (Node *node : all_frames) {
     if (node == selected)
@@ -167,9 +196,11 @@ void Window::change_selected_buffer_left() {
 
 void Window::change_selected_buffer_right() {
   using namespace __FRAMETREE_IMPL;
-  std::vector<Node *> all_frames = m_frame_tree->get_all_frames();
+  std::vector<Node *> all_frames =
+    m_frame_tree->get_all_frames();
 
-  Node *take = nullptr, *selected = m_frame_tree->m_selected;
+  Node *take = nullptr,
+       *selected = m_frame_tree->m_selected;
 
   for (Node *node : all_frames) {
     if (node == selected)
@@ -192,8 +223,9 @@ void Window::change_selected_buffer_right() {
 
 void Window::add_key_combos(
   std::vector<std::string> combos,
-  std::function<void(Window *window, BufferCursor &cursor, Frame *frame)>
-    callback
+  std::function<void(
+    Window *window, BufferCursor &cursor, Frame *frame
+  )> callback
 ) {
   for (const std::string &s : combos) {
     add_key_combo(s, callback);
@@ -201,8 +233,9 @@ void Window::add_key_combos(
 }
 void Window::add_key_combo(
   std::string combo,
-  std::function<void(Window *window, BufferCursor &cursor, Frame *frame)>
-    callback
+  std::function<void(
+    Window *window, BufferCursor &cursor, Frame *frame
+  )> callback
 ) {
   m_input_manager->add_key_combo(combo, callback);
 }
@@ -218,7 +251,9 @@ void Window::swap_buffers() { glfwSwapBuffers(m_window); }
 
 void Window::open_minibuffer() { m_in_minibuffer = true; }
 
-bool Window::in_minibuffer() const { return m_in_minibuffer; }
+bool Window::in_minibuffer() const {
+  return m_in_minibuffer;
+}
 
 void Window::minibuffer_return() {
   // Reset the flag
@@ -226,7 +261,8 @@ void Window::minibuffer_return() {
 
   // Extract the text, without newlined
   std::string gotten_text = "";
-  for (std::string line : m_minibuffer->m_buffer->get_text()) {
+  for (std::string line :
+       m_minibuffer->m_buffer->get_text()) {
     // Add a space instead of newline
     if (!gotten_text.empty()) {
       gotten_text += " ";
@@ -237,13 +273,16 @@ void Window::minibuffer_return() {
 
   // Erase text
   m_minibuffer->m_buffer->use_cursor(
-    [](Window *, BufferCursor &cursor, Frame *) { cursor.set_text(""); }
+    [](Window *, BufferCursor &cursor, Frame *) {
+      cursor.set_text("");
+    }
   );
 
   process_minibuffer_command(gotten_text);
 }
 
-void Window::process_minibuffer_command(std::string command) {
+void Window::process_minibuffer_command(std::string command
+) {
   if (command.empty())
     return;
 
@@ -252,8 +291,18 @@ void Window::process_minibuffer_command(std::string command) {
   } else if (command[0] == 'e') {
     if (command.size() <= 2 || command[1] != ' ') {
       LOG("Error: must provide file path with after 'e'");
+      return;
     }
-    get_active_buffer()->open_path(command.substr(2, command.size() - 2));
+
+    use_active_frame<void>([&](Frame *f) {
+      f->load_buffer(m_buffer_manager->get_files_buffer(
+        command.substr(2, command.size() - 2)
+      ));
+    });
+    use_active_frame<void>([&](Frame *f) {
+      std::cout << f->m_buffer.get() << std::endl;
+    });
+
   } else {
     LOG("Cannot parse command '" + command + "'");
   }

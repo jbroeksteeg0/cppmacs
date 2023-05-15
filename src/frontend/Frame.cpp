@@ -13,8 +13,8 @@ Frame::Frame(std::shared_ptr<Buffer> buffer, Window *parent)
   initialise_opengl_data();
 }
 
-void Frame::load_file(std::string name) {
-  m_buffer = m_window->m_buffer_manager->get_files_buffer(name);
+void Frame::load_buffer(std::shared_ptr<Buffer> buffer) {
+  m_buffer = buffer;
   m_buffer->m_current_frame = this;
 }
 

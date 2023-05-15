@@ -71,6 +71,11 @@ private:
   std::unique_ptr<Frame> m_minibuffer;
 private:
   std::shared_ptr<Buffer> get_active_buffer();
+
+  template<typename T> T use_active_frame(std::function<T(Frame*)> func) {
+    return func(m_frame_tree->m_selected->frame.get());
+  }
+
   void swap_buffers();
   friend void key_callback(
     GLFWwindow *window,

@@ -18,8 +18,7 @@ struct Frame {
   Frame(std::shared_ptr<Buffer> buffer, Window *parent);
 
   void draw();
-  void load_file(std::string name);
-
+  void load_buffer(std::shared_ptr<Buffer> buffer);
 private:
   Window *m_window;
   std::shared_ptr<Buffer> m_buffer;

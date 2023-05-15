@@ -181,13 +181,6 @@ int main() {
     }
   );
 
-  window.add_key_combo(
-    "Ctrl Space f",
-    [](Window *window, BufferCursor &cursor, Frame *frame) {
-      frame->load_file("/home/joshua/test_file");
-    }
-  );
-
   std::vector<char> symbols = {'!', '@', '#',  '$', '%',  '^', '&', '*',
                                '(', ')', '-',  '=', '_',  '+', '{', '}',
                                '[', ']', ':',  ';', '\'', '"', ',', '<',
