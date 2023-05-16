@@ -90,7 +90,7 @@ void Window::run() {
     if (m_in_minibuffer) {
       m_minibuffer->m_x = 0;
       m_minibuffer->m_width = window_width;
-      m_minibuffer->m_x = 0;
+      m_minibuffer->m_y = 0;
       m_minibuffer->m_height = 32;
       m_minibuffer->draw();
     }
@@ -299,9 +299,13 @@ void Window::process_minibuffer_command(std::string command
         command.substr(2, command.size() - 2)
       ));
     });
+
     use_active_frame<void>([&](Frame *f) {
       std::cout << f->m_buffer.get() << std::endl;
     });
+
+    
+
 
   } else {
     LOG("Cannot parse command '" + command + "'");

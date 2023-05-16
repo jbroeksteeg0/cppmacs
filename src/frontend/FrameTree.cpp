@@ -29,8 +29,9 @@ void __FRAMETREE_IMPL::Node::update_frame_geometry(
     );
   } else if (type == __FRAMETREE_IMPL::Type::VSPLIT) { // TODO: this is still clapped
     float top_height = height * split;
+
     left->update_frame_geometry(
-      x, height - top_height, width, top_height
+      x, y+height - top_height, width, top_height
     );
 
     right->update_frame_geometry(
@@ -90,6 +91,7 @@ void FrameTree::create_frame_hsplit(Node *at, float split) {
 void FrameTree::create_frame_vsplit(Node *at, float split) {
   std::shared_ptr<Buffer> original_buffer =
     at->frame->m_buffer;
+  // Stores whether the current selected node has to change
   bool reset_selected = at == m_selected;
 
   at->type = VSPLIT;
