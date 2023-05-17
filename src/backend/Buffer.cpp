@@ -95,13 +95,25 @@ void Buffer::open_path(std::string file_path) {
   m_file = path;
 
   // Clear the original content
-  
+  while (m_rope.size()) {
+    m_rope.erase(0);
+  }
   // Load the file
   std::ifstream in(path.string());
   std::string temp;
   while (std::getline(in, temp)) {
-    
+    if (m_rope.size() != 0) {
+      m_rope.insert('\n', m_rope.size());
+    }
+    for (char ch: temp) {
+      m_rope.insert(ch,m_rope.size());
+    }
   }
+}
+
+void Buffer::close() {
+  m_should_close = true;
+  m_thread.join();
 }
 
 int Buffer::get_cursor_position() const {

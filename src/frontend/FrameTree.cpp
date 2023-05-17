@@ -27,7 +27,7 @@ void __FRAMETREE_IMPL::Node::update_frame_geometry(
     right->update_frame_geometry(
       x + left_width, y, width - left_width, height
     );
-  } else if (type == __FRAMETREE_IMPL::Type::VSPLIT) { // TODO: this is still clapped
+  } else if (type == __FRAMETREE_IMPL::Type::VSPLIT) {
     float top_height = height * split;
 
     left->update_frame_geometry(

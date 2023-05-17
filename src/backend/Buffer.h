@@ -33,7 +33,8 @@ public:
 
   void save();
   void open_path(std::string file_path);
-
+  void close();
+  
   int get_cursor_position() const;
   bool is_minibuffer() const;
 private:

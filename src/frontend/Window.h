@@ -1,4 +1,5 @@
 #pragma once
+#include "FrameTree.h"
 #include "./InputManager.h"
 #include "Frame.h"
 #include "Canvas.h"

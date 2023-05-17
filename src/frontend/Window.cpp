@@ -59,6 +59,8 @@ Window::Window() {
 }
 
 Window::~Window() {
+  m_minibuffer->m_buffer->close();
+  
   glfwDestroyWindow(m_window);
   glfwTerminate();
 }
@@ -287,26 +289,23 @@ void Window::process_minibuffer_command(std::string command
     return;
 
   if (command == "w") {
+    // Save the buffer
     get_active_buffer()->save();
   } else if (command[0] == 'e') {
+    // Load another file
+
+    // Check if the command syntax is wrong
     if (command.size() <= 2 || command[1] != ' ') {
       LOG("Error: must provide file path with after 'e'");
       return;
     }
 
+    // Load the file in the frame
     use_active_frame<void>([&](Frame *f) {
       f->load_buffer(m_buffer_manager->get_files_buffer(
         command.substr(2, command.size() - 2)
       ));
     });
-
-    use_active_frame<void>([&](Frame *f) {
-      std::cout << f->m_buffer.get() << std::endl;
-    });
-
-    
-
-
   } else {
     LOG("Cannot parse command '" + command + "'");
   }

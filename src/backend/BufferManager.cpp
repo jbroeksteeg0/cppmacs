@@ -8,8 +8,7 @@ BufferManager::BufferManager(Window *window)
 
 BufferManager::~BufferManager() {
   for (std::shared_ptr<Buffer> buffer : m_buffers) {
-    buffer->m_should_close = true;
-    buffer->m_thread.join();
+    buffer->close();
   }
 }
 
