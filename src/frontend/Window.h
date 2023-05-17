@@ -35,10 +35,11 @@ public:
   void close();
   void horizontal_split();
   void vertical_split();
-  void change_selected_buffer_up();
-  void change_selected_buffer_down();
-  void change_selected_buffer_left();
-  void change_selected_buffer_right();
+  void change_selected_frame_up();
+  void change_selected_frame_down();
+  void change_selected_frame_left();
+  void change_selected_frame_right();
+  void close_current_frame();
 
   void add_key_combo(
     std::string combo,

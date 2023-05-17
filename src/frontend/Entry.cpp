@@ -158,26 +158,26 @@ int main() {
   window.add_key_combo(
     "Ctrl Space w j",
     [](Window *window, BufferCursor &cursor, Frame *frame) {
-      window->change_selected_buffer_down();
+      window->change_selected_frame_down();
     }
   );
   window.add_key_combo(
     "Ctrl Space w k",
     [](Window *window, BufferCursor &cursor, Frame *frame) {
-      window->change_selected_buffer_up();
+      window->change_selected_frame_up();
     }
   );
 
   window.add_key_combo(
     "Ctrl Space w h",
     [](Window *window, BufferCursor &cursor, Frame *frame) {
-      window->change_selected_buffer_left();
+      window->change_selected_frame_left();
     }
   );
   window.add_key_combo(
     "Ctrl Space w l",
     [](Window *window, BufferCursor &cursor, Frame *frame) {
-      window->change_selected_buffer_right();
+      window->change_selected_frame_right();
     }
   );
 
@@ -200,6 +200,10 @@ int main() {
       window->open_minibuffer();
     }
   );
+
+  window.add_key_combo("Ctrl Space w q", [](Window *window, BufferCursor &cursor, Frame *frame){
+    window->close_current_frame();
+  });
 
   window.run();
 }

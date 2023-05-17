@@ -1,5 +1,6 @@
 #include "FrameTree.h"
 #include "src/frontend/Frame.h"
+#include <queue>
 
 void __FRAMETREE_IMPL::Node::draw_all_frames(FrameTree *tree
 ) {
@@ -106,6 +107,49 @@ void FrameTree::create_frame_vsplit(Node *at, float split) {
   if (reset_selected) {
     m_selected = at->left.get();
   }
+}
+
+__FRAMETREE_IMPL::Node* FrameTree::find_parent(Node *at) {
+  // BFS over all nodes
+  std::queue<Node*> nodes;
+  nodes.push(m_root.get());
+
+  while (!nodes.empty()) {
+    Node* curr = nodes.front();
+    nodes.pop();
+
+    // If the current node is the parent, return it
+    if (curr->left != nullptr && curr->left.get() == at)
+      return curr;
+    if (curr->right != nullptr && curr->right.get() == at)
+      return curr;
+
+    // Push children into queue
+    if (curr->left != nullptr)
+      nodes.push(curr->left.get());
+    if (curr->right != nullptr)
+      nodes.push(curr->right.get());
+  }
+  return nullptr;
+}
+
+void FrameTree::delete_frame(Node *to_delete) {
+  ASSERT(to_delete->type == FRAME, "delete should only be called on leaf");
+
+  Node *parent = find_parent(to_delete);
+  if (parent == nullptr)
+    return;
+
+  // Get the parent's other child
+  Node *other_child = (parent->left.get() == to_delete ? parent->right.get() : parent->left.get());
+
+  // Set the parent to a node with that child's frame
+  *parent = Node(
+		 std::unique_ptr<Frame>(other_child->frame.release())
+		 );
+
+  if (to_delete == m_selected || m_selected == other_child)
+    m_selected = parent;
 }
 
 std::vector<__FRAMETREE_IMPL::Node*> FrameTree::get_all_frames() {

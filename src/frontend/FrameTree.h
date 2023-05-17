@@ -37,11 +37,11 @@ struct Node {
   void draw_all_frames(FrameTree *tree);
   void update_frame_geometry(float x, float y, float width, float height);
 
-  friend class FrameTree;
-
   void draw_and_recurse();
   void get_all_leaves(std::vector<Node*>& output);
   void update_dimensions(int x, int y, int width, int height);
+
+  friend class FrameTree;
 };
 
 };    // namespace __FRAMETREE_IMPL
@@ -66,7 +66,8 @@ private:
   Window *m_window;
   Node *m_selected;
   std::shared_ptr<Node> m_root;
-
+private:
+  Node *find_parent(Node *at);
   friend class Window;
   friend struct __FRAMETREE_IMPL::Node;
   friend class Buffer;

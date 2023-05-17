@@ -118,7 +118,7 @@ void Window::vertical_split() {
   );
 }
 
-void Window::change_selected_buffer_up() {
+void Window::change_selected_frame_up() {
   using namespace __FRAMETREE_IMPL;
   std::vector<Node *> all_frames =
     m_frame_tree->get_all_frames();
@@ -142,7 +142,7 @@ void Window::change_selected_buffer_up() {
     m_frame_tree->m_selected = take;
   }
 }
-void Window::change_selected_buffer_down() {
+void Window::change_selected_frame_down() {
   using namespace __FRAMETREE_IMPL;
   std::vector<Node *> all_frames =
     m_frame_tree->get_all_frames();
@@ -169,7 +169,7 @@ void Window::change_selected_buffer_down() {
   }
 }
 
-void Window::change_selected_buffer_left() {
+void Window::change_selected_frame_left() {
   using namespace __FRAMETREE_IMPL;
   std::vector<Node *> all_frames =
     m_frame_tree->get_all_frames();
@@ -196,7 +196,7 @@ void Window::change_selected_buffer_left() {
   }
 }
 
-void Window::change_selected_buffer_right() {
+void Window::change_selected_frame_right() {
   using namespace __FRAMETREE_IMPL;
   std::vector<Node *> all_frames =
     m_frame_tree->get_all_frames();
@@ -221,6 +221,10 @@ void Window::change_selected_buffer_right() {
   if (take != nullptr) {
     m_frame_tree->m_selected = take;
   }
+}
+
+void Window::close_current_frame() {
+  m_frame_tree->delete_frame(m_frame_tree->m_selected);
 }
 
 void Window::add_key_combos(
