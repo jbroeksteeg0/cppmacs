@@ -60,7 +60,7 @@ Window::Window() {
 
 Window::~Window() {
   m_minibuffer->m_buffer->close();
-  
+
   glfwDestroyWindow(m_window);
   glfwTerminate();
 }
@@ -78,6 +78,14 @@ void Window::run() {
     glfwGetWindowSize(
       m_window, &window_width, &window_height
     );
+
+    /*
+    glViewport(0,0,window_height,window_height);
+    std::cout << "Up to index " << m_canvas->m_curr_matrix_index << std::endl;
+    m_canvas->set_ortho_projection(window_width, window_height);
+    m_canvas->draw_rectangle(50, 0, 50, 50);
+    */
+    
     if (m_in_minibuffer) {
       m_frame_tree->update_frame_geometry(
         0, 32, window_width, window_height - 32
@@ -96,6 +104,7 @@ void Window::run() {
       m_minibuffer->m_height = 32;
       m_minibuffer->draw();
     }
+    
 
     glfwSwapBuffers(m_window);
     glfwPollEvents();
@@ -298,6 +307,13 @@ void Window::process_minibuffer_command(std::string command
   } else if (command[0] == 'e') {
     // Load another file
 
+    // if it's just 'e', refresh
+    if (command == "e") {
+      // Reload the file in the frame
+      get_active_buffer()->open_path(get_active_buffer()->get_file_path());
+      return;
+    }
+
     // Check if the command syntax is wrong
     if (command.size() <= 2 || command[1] != ' ') {
       LOG("Error: must provide file path with after 'e'");
@@ -310,6 +326,22 @@ void Window::process_minibuffer_command(std::string command
         command.substr(2, command.size() - 2)
       ));
     });
+  } else if (command[0] == '!') {
+    // run a shell command
+
+    // Check if the syntax is wrong
+    if (command.size() <= 2 || command[1] != ' ') {
+      LOG("Error: must provide command after '!'");
+      return;
+    }
+
+    // Run the command in the correct directory
+    std::string current_dir =
+      get_active_buffer()->get_directory();
+    std::string shell_comand =
+      "cd " + current_dir + "/; "
+      + command.substr(2, command.size() - 2);
+    system(shell_comand.c_str());
   } else {
     LOG("Cannot parse command '" + command + "'");
   }

@@ -1,19 +1,19 @@
 #pragma once
 #include "Program.h"
 #include <array>
+#include <chrono>
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
 #include <iostream>
-#include <vector>
-#include <chrono>
-#include <array>
 #include <map>
+#include <vector>
 
 class Window;
 
 struct ColorTheme {
-  std::array<float, 3> background = {0.0f,0.0f,0.0f};
-  std::array<float, 3> text = {1.0f,1.0f,1.0f};
+  std::array<float, 3> background = {
+    0.5f, 0.5f, 0.5f};
+  std::array<float, 3> text = {1.0f, 1.0f, 1.0f};
 };
 
 struct Canvas {
@@ -25,18 +25,31 @@ public:
     float x,
     float y,
     int size,
-    std::array<float, 3> color = {1.0f,1.0f,1.0f}
+    std::array<float, 3> color = {1.0f, 1.0f, 1.0f}
   );
-  void draw_rectangle(float x, float y, float width, float height);
+  void draw_rectangle(
+    float x,
+    float y,
+    float width,
+    float height,
+    std::array<float, 3> color = {1.0f, 1.0f, 1.0f}
+  );
   void set_ortho_projection(float width, float height);
-  void set_matrix_index(size_t index); // TODO: should be private?
+  void set_matrix_index(size_t index
+  );    // TODO: should be private?
 
   void text_box_init(int x, int y, int width, int height);
-  void text_box_write_line(const std::string& text, int cursor_pos = INT_MAX, int size=32, std::array<float, 3> color = {0.0f, 0.0f, 0.0f});
+  void text_box_write_line(
+    const std::string &text,
+    int cursor_pos = INT_MAX,
+    int size = 32,
+    std::array<float, 3> color = {0.0f, 0.0f, 0.0f}
+  );
   void text_box_key_pressed();
 
   bool text_box_is_finished() const;
-  std::pair<int,int> get_text_dimensions(const std::string& text, int size);
+  std::pair<int, int>
+  get_text_dimensions(const std::string &text, int size);
 
 private:
   Window *m_ptr;
@@ -63,7 +76,8 @@ private:
   int m_text_box_width, m_text_box_height;
   int m_text_box_offset_y;
 
-  int m_line_spacing=8;
+  const int m_line_spacing = 8;
+  const int m_horizontal_spacing = 8;
 
   // --------- CURSOR
   int m_cursor_flash_duration = 800;

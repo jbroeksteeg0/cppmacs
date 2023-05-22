@@ -123,3 +123,17 @@ int Buffer::get_cursor_position() const {
 bool Buffer::is_minibuffer() const {
   return m_parent->in_minibuffer() && this == m_parent->get_active_buffer().get();
 }
+
+std::string Buffer::get_directory() const {
+  if (auto file = m_file) {
+    return (*file).parent_path();
+  }
+  return getenv("HOME");
+}
+
+std::string Buffer::get_file_path() const {
+  if (auto file = m_file) {
+    return (*file).string();
+  }
+  return getenv("HOME");
+}

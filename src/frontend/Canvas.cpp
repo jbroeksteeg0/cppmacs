@@ -105,13 +105,17 @@ void Canvas::init_text(int size) {
   glBindBuffer(GL_ARRAY_BUFFER, m_text_VBO);
   glBufferData(
     GL_ARRAY_BUFFER,
-    sizeof(float) * 6 * 4,
+    sizeof(float) * 6 * 5,
     NULL,
     GL_DYNAMIC_DRAW
   );
   glEnableVertexAttribArray(0);
+  glEnableVertexAttribArray(1);
   glVertexAttribPointer(
-    0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0
+    0, 4, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0
+  );
+  glVertexAttribPointer(
+    1, 1, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0
   );
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
@@ -158,14 +162,39 @@ void Canvas::draw_text(
     float w = ch.size.x * scale;
     float h = ch.size.y * scale;
     // update m_text_VBO for each character
-    float vertices[6][4] = {
-      {x_pos, y_pos + h, 0.0f, 0.0f},
-      {x_pos, y_pos, 0.0f, 1.0f},
-      {x_pos + w, y_pos, 1.0f, 1.0f},
 
-      {x_pos, y_pos + h, 0.0f, 0.0f},
-      {x_pos + w, y_pos, 1.0f, 1.0f},
-      {x_pos + w, y_pos + h, 1.0f, 0.0f}};
+    float vertices[6][5] = {
+      {x_pos,
+       y_pos + h,
+       0.0f,
+       0.0f,
+       (float)m_curr_matrix_index},
+      {x_pos,
+       y_pos,
+       0.0f,
+       1.0f,
+       (float)m_curr_matrix_index},
+      {x_pos + w,
+       y_pos,
+       1.0f,
+       1.0f,
+       (float)m_curr_matrix_index},
+
+      {x_pos,
+       y_pos + h,
+       0.0f,
+       0.0f,
+       (float)m_curr_matrix_index},
+      {x_pos + w,
+       y_pos,
+       1.0f,
+       1.0f,
+       (float)m_curr_matrix_index},
+      {x_pos + w,
+       y_pos + h,
+       1.0f,
+       0.0f,
+       (float)m_curr_matrix_index}};
 
     // render glyph texture over quad
     glBindTexture(GL_TEXTURE_2D, ch.id);
@@ -195,31 +224,43 @@ void Canvas::draw_text(
 void Canvas::set_ortho_projection(
   float width, float height
 ) {
-  projections[0] =
+
+  m_curr_matrix_index++;
+  m_curr_matrix_index %= 256;
+
+  projections[m_curr_matrix_index] =
     glm::ortho(0.0f, width, 0.0f, height);
 
   m_text_program.use();
-  glUniformMatrix4fv(
-    glGetUniformLocation(
-      m_text_program.get_program(), "projections"
-    ),
-    256,
-    GL_FALSE,
-    glm::value_ptr(projections[0])
-  );
+
+  for (int i = 0; i < 256; i++) {
+    glUniformMatrix4fv(
+      glGetUniformLocation(
+        m_text_program.get_program(),
+        ("projections[" + std::to_string(i) + "]").c_str()
+      ),
+      1,
+      GL_FALSE,
+      glm::value_ptr(projections[i])
+    );
+  }
 
   m_geometry_program.use();
-  glUniformMatrix4fv(
-    glGetUniformLocation(
-      m_geometry_program.get_program(), "projections"
-    ),
-    1,
-    GL_FALSE,
-    glm::value_ptr(projections[0])
-  );
 
-  m_curr_matrix_index ++;
-  m_curr_matrix_index %= 256;
+  for (int i = 0; i < 256; i++) {
+    glUniformMatrix4fv(
+      glGetUniformLocation(
+        m_geometry_program.get_program(),
+        ("projections[" + std::to_string(i) + "]").c_str()
+      ),
+      1,
+      GL_FALSE,
+      glm::value_ptr(projections[i])
+    );
+  }
+
+  //  usleep(100000);
+  //glFlush();
 }
 
 void Canvas::init_geometry_buffers() {
@@ -228,29 +269,27 @@ void Canvas::init_geometry_buffers() {
 }
 
 void Canvas::draw_rectangle(
-  float x, float y, float width, float height
+  float x,
+  float y,
+  float width,
+  float height,
+  std::array<float, 3> color
 ) {
 
-  float vertices[18] = {
-    x,
-    y,
-    (float)m_curr_matrix_index,
-    x + width,
-    y,
-    (float)m_curr_matrix_index,
-    x + width,
-    y + height,
-    (float)m_curr_matrix_index,
+  float vertices[36] = {
+    x,         y,          (float)m_curr_matrix_index,
+    color[0],  color[1],   color[2],
+    x + width, y,          (float)m_curr_matrix_index,
+    color[0],  color[1],   color[2],
+    x + width, y + height, (float)m_curr_matrix_index,
+    color[0],  color[1],   color[2],
 
-    x + width,
-    y + height,
-    (float)m_curr_matrix_index,
-    x,
-    y + height,
-    (float)m_curr_matrix_index,
-    x,
-    y,
-    (float)m_curr_matrix_index};
+    x + width, y + height, (float)m_curr_matrix_index,
+    color[0],  color[1],   color[2],
+    x,         y + height, (float)m_curr_matrix_index,
+    color[0],  color[1],   color[2],
+    x,         y,          (float)m_curr_matrix_index,
+    color[0],  color[1],   color[2]};
 
   glBindBuffer(GL_ARRAY_BUFFER, this->m_rect_VBO);
   glBufferData(
@@ -263,15 +302,29 @@ void Canvas::draw_rectangle(
   glBindVertexArray(this->m_rect_VAO);
 
   glVertexAttribPointer(
-    0, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0
+    0, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0
   );
   glVertexAttribPointer(
-    1, 1, GL_INT, GL_FALSE, 3 * sizeof(float), 0
+    1,
+    1,
+    GL_FLOAT,
+    GL_FALSE,
+    6 * sizeof(float),
+    (void *)(2 * sizeof(float))
+  );
+  glVertexAttribPointer(
+    2,
+    3,
+    GL_FLOAT,
+    GL_FALSE,
+    6 * sizeof(float),
+    (void *)(3 * sizeof(float))
   );
 
   m_geometry_program.use();
   glEnableVertexAttribArray(0);
   glEnableVertexAttribArray(1);
+  glEnableVertexAttribArray(2);
 
   glDrawArrays(GL_TRIANGLES, 0, 6);
 }
@@ -279,10 +332,10 @@ void Canvas::draw_rectangle(
 void Canvas::text_box_init(
   int x, int y, int width, int height
 ) {
-  m_text_box_x = x;
+  m_text_box_x = x + m_horizontal_spacing;
   m_text_box_y = y;
 
-  m_text_box_width = width;
+  m_text_box_width = width - (m_horizontal_spacing * 2);
   m_text_box_height = height;
 
   // offset = height - max(height of characters)
@@ -359,7 +412,8 @@ void Canvas::text_box_write_line(
 
       if (!cursor_flashing && !has_cursor_drawn) {
         draw_rectangle(
-          get_text_dimensions(prefix, size).first,
+          get_text_dimensions(prefix, size).first
+            + m_horizontal_spacing,
           m_text_box_offset_y - 2,
           m_cursor_width,
           get_text_dimensions(all_chars, size).second + 4

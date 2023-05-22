@@ -37,6 +37,8 @@ public:
   
   int get_cursor_position() const;
   bool is_minibuffer() const;
+  std::string get_directory() const;
+  std::string get_file_path() const;
 private:
   std::optional<std::filesystem::path> m_file;
   Rope<char> m_rope;
