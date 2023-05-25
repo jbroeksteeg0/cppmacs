@@ -122,6 +122,21 @@ bool BufferCursor::in_minibuffer() const {
   return m_buffer->is_minibuffer();
 }
 
+int BufferCursor::get_leading_spaces() const {
+  int line_start = m_index;
+
+  while (line_start > 0 && m_buffer->m_rope.at(line_start-1) != '\n') {
+    line_start--;
+  };
+
+  int first_nonspace = line_start;
+
+  while (first_nonspace < m_buffer->m_rope.size() && m_buffer->m_rope.at(first_nonspace) == ' ') {
+    first_nonspace++;
+  }
+  return first_nonspace - line_start;
+}
+
 void BufferCursor::minibuffer_return() {
   return m_buffer->m_parent->minibuffer_return();
 }

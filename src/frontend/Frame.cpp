@@ -30,7 +30,16 @@ void Frame::draw() {
 
   draw_border(this == m_window->m_frame_tree->m_selected->frame.get());
 
-  canvas->text_box_init(0, 0, m_width, m_height);
+  if (!m_buffer->is_minibuffer()) {
+    canvas->text_box_init(0, 28, m_width, m_height - 4);
+    std::string file_text = m_buffer->m_file.has_value()
+                              ? m_buffer->m_file->string()
+                              : "Scratch Buffer";
+    canvas->draw_rectangle(0.0f, 0.0f, (float)m_width, 28.0f, m_window->color_theme.text);
+    canvas->draw_text("Open: " + file_text, 8, 8, 18, m_window->color_theme.background);
+  } else {
+    canvas->text_box_init(0, 0, m_width, m_height);
+  }
 
   int cursor_pos = m_buffer->get_cursor_position();
 
@@ -57,13 +66,25 @@ void Frame::draw_border(bool is_selected) {
 
   const float thickness = 2.0f * (is_selected ? 3.0f : 1.0f);
 
-  canvas->draw_rectangle(0.0f, 0.0f, thickness, (float)m_height, this->m_window->color_theme.text);
   canvas->draw_rectangle(
-			 (float)m_width - thickness, 0.0f, thickness, (float)m_height, this->m_window->color_theme.text
+    0.0f, 0.0f, thickness, (float)m_height, this->m_window->color_theme.text
+  );
+  canvas->draw_rectangle(
+    (float)m_width - thickness,
+    0.0f,
+    thickness,
+    (float)m_height,
+    this->m_window->color_theme.text
   );
 
   canvas->draw_rectangle(
-			 0.0f, (float)m_height - thickness, (float)m_width, thickness, this->m_window->color_theme.text
+    0.0f,
+    (float)m_height - thickness,
+    (float)m_width,
+    thickness,
+    this->m_window->color_theme.text
   );
-  canvas->draw_rectangle(0.0f, 0.0f, (float)m_width, thickness, this->m_window->color_theme.text);
+  canvas->draw_rectangle(
+    0.0f, 0.0f, (float)m_width, thickness, this->m_window->color_theme.text
+  );
 }

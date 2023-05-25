@@ -20,6 +20,7 @@ public:
   void move_down();
 
   int get_index() const;
+  int get_leading_spaces() const;
   char get_character(int index) const;
   bool in_minibuffer() const;
 private:

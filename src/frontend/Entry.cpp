@@ -205,5 +205,23 @@ int main() {
     window->close_current_frame();
   });
 
+  window.add_key_combo("Ctrl i", [](Window *window, BufferCursor &cursor, Frame *frame){
+    std::string padding = "";
+    for (int i = 0; i < cursor.get_leading_spaces(); i++)
+      padding += " ";
+
+    cursor.insert_text("if () {");
+    cursor.insert_newline();
+    cursor.insert_text(padding + "  ");
+    cursor.insert_newline();
+    cursor.insert_text(padding + "}");
+
+    cursor.move_up();
+    cursor.move_up();
+    cursor.move_right();
+    cursor.move_right();
+    cursor.move_right();
+  });
+
   window.run();
 }
