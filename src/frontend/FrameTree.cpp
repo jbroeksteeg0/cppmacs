@@ -20,19 +20,18 @@ void __FRAMETREE_IMPL::Node::update_frame_geometry(
     frame->m_y = (int)y;
     frame->m_width = (int)width;
     frame->m_height = (int)height;
-
   } else if (type == __FRAMETREE_IMPL::Type::HSPLIT) {
     float left_width = width * split;
     left->update_frame_geometry(x, y, left_width, height);
 
     right->update_frame_geometry(
-      x + left_width, y, width - left_width, height
+      x + left_width+1, y, width - left_width-1, height
     );
   } else if (type == __FRAMETREE_IMPL::Type::VSPLIT) {
     float top_height = height * split;
 
     left->update_frame_geometry(
-      x, y+height - top_height, width, top_height
+      x, y+height - top_height+1, width, top_height-1
     );
 
     right->update_frame_geometry(
