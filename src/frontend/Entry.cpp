@@ -142,7 +142,6 @@ int main() {
     [](Window *window, BufferCursor &cursor, Frame *frame) { window->close(); }
   );
 
-  // TODO: this dies lmao
   window.add_key_combo(
     "Ctrl Space w v",
     [](Window *window, BufferCursor &cursor, Frame *frame) {
@@ -204,6 +203,7 @@ int main() {
   window.add_key_combo("Ctrl Space w q", [](Window *window, BufferCursor &cursor, Frame *frame){
     window->close_current_frame();
   });
+
 
   window.add_key_combo("Ctrl i", [](Window *window, BufferCursor &cursor, Frame *frame){
     std::string padding = "";
