@@ -12,12 +12,10 @@
 #include FT_FREETYPE_H
 
 Canvas::Canvas(Window *ptr) : m_ptr(ptr) {
-  m_text_program =
-    Program(text_vertex_shader, text_fragment_shader);
+  m_text_program = Program(text_vertex_shader, text_fragment_shader);
 
-  m_geometry_program = Program(
-    standard_vertex_shader, standard_fragment_shader
-  );
+  m_geometry_program =
+    Program(standard_vertex_shader, standard_fragment_shader);
 
   init_geometry_buffers();
 }
@@ -26,12 +24,7 @@ void Canvas::init_text(int size) {
   FT_Library ft;
   FT_Init_FreeType(&ft);
   FT_Face face;
-  if (FT_New_Face(
-        ft,
-        "/usr/share/fonts/TTF/FiraCode-Medium.ttf",
-        0,
-        &face
-      )) {
+  if (FT_New_Face(ft, "/usr/share/fonts/TTF/FiraCode-Medium.ttf", 0, &face)) {
     ERROR("Error initialising face");
     exit(1);
   }
@@ -39,9 +32,7 @@ void Canvas::init_text(int size) {
   // set height to 48, width to natural
   FT_Set_Pixel_Sizes(face, 0, size);
 
-  glPixelStorei(
-    GL_UNPACK_ALIGNMENT, 1
-  );    // something to do with alignment
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);    // something to do with alignment
 
   // load the chars
   for (int i = 0; i < 128; i++) {
@@ -67,27 +58,15 @@ void Canvas::init_text(int size) {
     );
 
     // set texture options in opengl
-    glTexParameteri(
-      GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE
-    );
-    glTexParameteri(
-      GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE
-    );
-    glTexParameteri(
-      GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR
-    );
-    glTexParameteri(
-      GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR
-    );
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     m_characters[size].push_back(
       {texture,
-       glm::ivec2(
-         face->glyph->bitmap.width, face->glyph->bitmap.rows
-       ),
-       glm::ivec2(
-         face->glyph->bitmap_left, face->glyph->bitmap_top
-       ),
+       glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+       glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
        face->glyph->advance.x}
     );
   }
@@ -103,30 +82,19 @@ void Canvas::init_text(int size) {
   glGenBuffers(1, &m_text_VBO);
   glBindVertexArray(m_text_VAO);
   glBindBuffer(GL_ARRAY_BUFFER, m_text_VBO);
-  glBufferData(
-    GL_ARRAY_BUFFER,
-    sizeof(float) * 6 * 5,
-    NULL,
-    GL_DYNAMIC_DRAW
-  );
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 5, NULL, GL_DYNAMIC_DRAW);
+
   glEnableVertexAttribArray(0);
   glEnableVertexAttribArray(1);
-  glVertexAttribPointer(
-    0, 4, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0
-  );
-  glVertexAttribPointer(
-    1, 1, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0
-  );
+  glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
+  glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(4*sizeof(float)));
+  
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 }
 
 void Canvas::draw_text(
-  std::string text,
-  float x,
-  float y,
-  int size,
-  std::array<float, 3> color
+  std::string text, float x, float y, int size, std::array<float, 3> color
 ) {
   if (m_characters[size].empty())
     init_text(size);
@@ -139,9 +107,7 @@ void Canvas::draw_text(
   // set the color of the text
   // TODO: doesn't work lmao
   glUniform3f(
-    glGetUniformLocation(
-      m_text_program.get_program(), "textColor"
-    ),
+    glGetUniformLocation(m_text_program.get_program(), "textColor"),
     color[0],
     color[1],
     color[2]
@@ -164,72 +130,42 @@ void Canvas::draw_text(
     // update m_text_VBO for each character
 
     float vertices[6][5] = {
-      {x_pos,
-       y_pos + h,
-       0.0f,
-       0.0f,
-       (float)m_curr_matrix_index},
-      {x_pos,
-       y_pos,
-       0.0f,
-       1.0f,
-       (float)m_curr_matrix_index},
-      {x_pos + w,
-       y_pos,
-       1.0f,
-       1.0f,
-       (float)m_curr_matrix_index},
-
-      {x_pos,
-       y_pos + h,
-       0.0f,
-       0.0f,
-       (float)m_curr_matrix_index},
-      {x_pos + w,
-       y_pos,
-       1.0f,
-       1.0f,
-       (float)m_curr_matrix_index},
-      {x_pos + w,
-       y_pos + h,
-       1.0f,
-       0.0f,
-       (float)m_curr_matrix_index}};
+      {x_pos, y_pos + h, 0.0f, 0.0f, (float)m_curr_matrix_index},
+      {x_pos, y_pos, 0.0f, 1.0f, (float)m_curr_matrix_index},
+      {x_pos + w, y_pos, 1.0f, 1.0f, (float)m_curr_matrix_index},
+      {x_pos, y_pos + h, 0.0f, 0.0f, (float)m_curr_matrix_index},
+      {x_pos + w, y_pos, 1.0f, 1.0f, (float)m_curr_matrix_index},
+      {x_pos + w, y_pos + h, 1.0f, 0.0f, (float)m_curr_matrix_index}};
 
     // render glyph texture over quad
     glBindTexture(GL_TEXTURE_2D, ch.id);
 
     // update content of m_text_VBO memory
     glBindBuffer(GL_ARRAY_BUFFER, m_text_VBO);
-    glBufferSubData(
-      GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices
-    );    // glBufferSubdata is faster
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+
     // render quad
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
     // now advance cursors for next glyph (note that advance
     // is number of 1/64 pixels)
-    x +=
-      (ch.advance >> 6)
-      * scale;    // bitshift by 6 to get value in pixels
-                  // (2^6 = 64 (divide amount of 1/64th
-                  // pixels by 64 to get amount of pixels))
+    x += (ch.advance >> 6) * scale;    // bitshift by 6 to get value in pixels
+                                       // (2^6 = 64 (divide amount of 1/64th
+                                       // pixels by 64 to get amount of pixels))
   }
+
   glBindVertexArray(0);
   glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Canvas::set_ortho_projection(
-  float width, float height
-) {
-
+void Canvas::set_ortho_projection(float width, float height) {
   m_curr_matrix_index++;
   m_curr_matrix_index %= 256;
 
-  projections[m_curr_matrix_index] =
-    glm::ortho(0.0f, width, 0.0f, height);
+  projections[m_curr_matrix_index] = glm::ortho(0.0f, width, 0.0f, height);
 
   m_text_program.use();
 
@@ -260,7 +196,7 @@ void Canvas::set_ortho_projection(
   }
 
   //  usleep(100000);
-  //glFlush();
+  // glFlush();
 }
 
 void Canvas::init_geometry_buffers() {
@@ -269,56 +205,34 @@ void Canvas::init_geometry_buffers() {
 }
 
 void Canvas::draw_rectangle(
-  float x,
-  float y,
-  float width,
-  float height,
-  std::array<float, 3> color
+  float x, float y, float width, float height, std::array<float, 3> color
 ) {
 
-  float vertices[36] = {
-    x,         y,          (float)m_curr_matrix_index,
-    color[0],  color[1],   color[2],
-    x + width, y,          (float)m_curr_matrix_index,
-    color[0],  color[1],   color[2],
-    x + width, y + height, (float)m_curr_matrix_index,
-    color[0],  color[1],   color[2],
+  float vertices[36] = {x,         y,          (float)m_curr_matrix_index,
+                        color[0],  color[1],   color[2],
+                        x + width, y,          (float)m_curr_matrix_index,
+                        color[0],  color[1],   color[2],
+                        x + width, y + height, (float)m_curr_matrix_index,
+                        color[0],  color[1],   color[2],
 
-    x + width, y + height, (float)m_curr_matrix_index,
-    color[0],  color[1],   color[2],
-    x,         y + height, (float)m_curr_matrix_index,
-    color[0],  color[1],   color[2],
-    x,         y,          (float)m_curr_matrix_index,
-    color[0],  color[1],   color[2]};
+                        x + width, y + height, (float)m_curr_matrix_index,
+                        color[0],  color[1],   color[2],
+                        x,         y + height, (float)m_curr_matrix_index,
+                        color[0],  color[1],   color[2],
+                        x,         y,          (float)m_curr_matrix_index,
+                        color[0],  color[1],   color[2]};
 
   glBindBuffer(GL_ARRAY_BUFFER, this->m_rect_VBO);
-  glBufferData(
-    GL_ARRAY_BUFFER,
-    sizeof(vertices),
-    vertices,
-    GL_STATIC_DRAW
-  );
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
   glBindVertexArray(this->m_rect_VAO);
 
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
   glVertexAttribPointer(
-    0, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0
+    1, 1, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(2 * sizeof(float))
   );
   glVertexAttribPointer(
-    1,
-    1,
-    GL_FLOAT,
-    GL_FALSE,
-    6 * sizeof(float),
-    (void *)(2 * sizeof(float))
-  );
-  glVertexAttribPointer(
-    2,
-    3,
-    GL_FLOAT,
-    GL_FALSE,
-    6 * sizeof(float),
-    (void *)(3 * sizeof(float))
+    2, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float))
   );
 
   m_geometry_program.use();
@@ -329,9 +243,7 @@ void Canvas::draw_rectangle(
   glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void Canvas::text_box_init(
-  int x, int y, int width, int height
-) {
+void Canvas::text_box_init(int x, int y, int width, int height) {
   m_text_box_x = x + m_horizontal_spacing;
   m_text_box_y = y;
 
@@ -344,10 +256,7 @@ void Canvas::text_box_init(
 }
 
 void Canvas::text_box_write_line(
-  const std::string &text,
-  int cursor_pos,
-  int size,
-  std::array<float, 3> color
+  const std::string &text, int cursor_pos, int size, std::array<float, 3> color
 ) {
   std::string prefix;
   prefix.reserve(text.size());
@@ -355,10 +264,7 @@ void Canvas::text_box_write_line(
   std::vector<std::string> lines;
 
   for (size_t i = 0; i < text.size(); i++) {
-    ASSERT(
-      text[i] != '\n',
-      "Newlines should be handled in the rope"
-    );
+    ASSERT(text[i] != '\n', "Newlines should be handled in the rope");
 
     prefix += text[i];
 
@@ -386,22 +292,17 @@ void Canvas::text_box_write_line(
 
   for (std::string line : lines) {
     m_text_box_offset_y -=
-      get_text_dimensions(all_chars, size).second
-      + m_line_spacing;
+      get_text_dimensions(all_chars, size).second + m_line_spacing;
 
-    draw_text(
-      line, m_text_box_x, m_text_box_offset_y, size
-    );
+    draw_text(line, m_text_box_x, m_text_box_offset_y, size);
     if (cursor_pos >= 0 && cursor_pos <= (int)line.size()) {
       std::string prefix = line.substr(0, cursor_pos);
 
       using namespace std::chrono;
 
-      milliseconds time_since_typed =
-        duration_cast<milliseconds>(
-          system_clock::now().time_since_epoch()
-          - m_time_text_last_modified
-        );
+      milliseconds time_since_typed = duration_cast<milliseconds>(
+        system_clock::now().time_since_epoch() - m_time_text_last_modified
+      );
 
       // whether the cursor should be hidden at the current
       // moment
@@ -412,8 +313,7 @@ void Canvas::text_box_write_line(
 
       if (!cursor_flashing && !has_cursor_drawn) {
         draw_rectangle(
-          get_text_dimensions(prefix, size).first
-            + m_horizontal_spacing,
+          get_text_dimensions(prefix, size).first + m_horizontal_spacing,
           m_text_box_offset_y - 2,
           m_cursor_width,
           get_text_dimensions(all_chars, size).second + 4
@@ -432,9 +332,8 @@ bool Canvas::text_box_is_finished() const {
   return m_text_box_offset_y > m_text_box_height;
 }
 
-std::pair<int, int> Canvas::get_text_dimensions(
-  const std::string &text, int size
-) {
+std::pair<int, int>
+Canvas::get_text_dimensions(const std::string &text, int size) {
   // Initialise the textures for all the characters if they
   // don't already exist
   if (m_characters[size].empty()) {
@@ -467,6 +366,4 @@ void Canvas::text_box_key_pressed() {
     );
 }
 
-void Canvas::set_matrix_index(size_t index) {
-  m_curr_matrix_index = index;
-}
+void Canvas::set_matrix_index(size_t index) { m_curr_matrix_index = index; }

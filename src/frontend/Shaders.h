@@ -6,13 +6,14 @@ const std::string text_vertex_shader = R"A(
 #version 330 core
 layout (location = 0) in vec4 vertex; // <vec2 pos, vec2 tex>
 layout (location = 1) in float ind;
+
 out vec2 TexCoords;
 
 uniform mat4 projections[256];
 
 void main()
 {
-    gl_Position = projections[int(ind)] * vec4(vertex.xy, 0.0, 1.0);
+    gl_Position = projections[int(ind)%256] * vec4(vertex.xy, 0.0, 1.0);
     TexCoords = vertex.zw;
 }
 )A";
