@@ -12,8 +12,8 @@ class Window;
 
 struct ColorTheme {
   std::array<float, 3> background = {
-    0.5f, 0.5f, 0.5f};
-  std::array<float, 3> text = {1.0f, 1.0f, 1.0f};
+    0.176f, 0.164f, 0.18f};
+  std::array<float, 3> text = {0.878f, 0.98f, 0.94f};
 };
 
 struct Canvas {

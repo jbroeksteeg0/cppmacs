@@ -294,7 +294,7 @@ void Canvas::text_box_write_line(
     m_text_box_offset_y -=
       get_text_dimensions(all_chars, size).second + m_line_spacing;
 
-    draw_text(line, m_text_box_x, m_text_box_offset_y, size);
+    draw_text(line, m_text_box_x, m_text_box_offset_y, size, color);
     if (cursor_pos >= 0 && cursor_pos <= (int)line.size()) {
       std::string prefix = line.substr(0, cursor_pos);
 
