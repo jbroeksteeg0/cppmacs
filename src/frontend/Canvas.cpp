@@ -18,6 +18,7 @@ Canvas::Canvas(Window *ptr) : m_ptr(ptr) {
     Program(standard_vertex_shader, standard_fragment_shader);
 
   init_geometry_buffers();
+  init_text_buffers();
 }
 
 void Canvas::init_text(int size) {
@@ -73,8 +74,10 @@ void Canvas::init_text(int size) {
   // free resources
   FT_Done_Face(face);
   FT_Done_FreeType(ft);
+}
 
-  glEnable(GL_BLEND);
+void Canvas::init_text_buffers() {
+   glEnable(GL_BLEND);
   glEnable(GL_CULL_FACE);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -87,10 +90,12 @@ void Canvas::init_text(int size) {
   glEnableVertexAttribArray(0);
   glEnableVertexAttribArray(1);
   glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
-  glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(4*sizeof(float)));
-  
+  glVertexAttribPointer(
+    1, 1, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(4 * sizeof(float))
+  );
+
   glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
+  glBindVertexArray(0); 
 }
 
 void Canvas::draw_text(
@@ -98,7 +103,7 @@ void Canvas::draw_text(
 ) {
   if (m_characters[size].empty())
     init_text(size);
-
+  
   float scale = 1.0;
 
   // activate corresponding render state
@@ -243,7 +248,9 @@ void Canvas::draw_rectangle(
   glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void Canvas::text_box_init(int x, int y, int width, int height) {
+void Canvas::text_box_init(
+  int x, int y, int width, int height, int lines_scrolled
+) {
   m_text_box_x = x + m_horizontal_spacing;
   m_text_box_y = y;
 
@@ -252,13 +259,14 @@ void Canvas::text_box_init(int x, int y, int width, int height) {
 
   // offset = height - max(height of characters)
   std::string all_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  m_text_box_offset_y = y+height;
+  m_text_box_offset_y = y + height;
+
+  m_text_box_lines_skip = lines_scrolled;
 }
 
-void Canvas::text_box_write_line(
-  const std::string &text, int cursor_pos, int size, std::array<float, 3> color
-) {
-  std::string prefix;
+std::vector<std::string>
+Canvas::get_line_broken(const std::string &text, int size) {
+  std::string prefix = "";
   prefix.reserve(text.size());
 
   std::vector<std::string> lines;
@@ -285,18 +293,30 @@ void Canvas::text_box_write_line(
     lines = {""};
   }
 
+  return lines;
+}
+void Canvas::text_box_write_line(
+  const std::string &text, int cursor_pos, int size, std::array<float, 3> color
+) {
+  std::vector<std::string> lines = get_line_broken(text, size);
+
   std::string all_chars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
   bool has_cursor_drawn = false;
 
   for (std::string line : lines) {
-    m_text_box_offset_y -=
-      get_text_dimensions(all_chars, size).second + m_line_spacing;
+    if (m_text_box_lines_skip == 0) {
+      m_text_box_offset_y -=
+        get_text_dimensions(all_chars, size).second + m_line_spacing;
+      if (m_text_box_offset_y < m_text_box_y)
+        break;
 
-    if (m_text_box_offset_y < m_text_box_y)
-      break;
-    draw_text(line, m_text_box_x, m_text_box_offset_y, size, color);
+      draw_text(line, m_text_box_x, m_text_box_offset_y, size, color);
+    } else {
+      m_text_box_lines_skip--;
+    }
+
     if (cursor_pos >= 0 && cursor_pos <= (int)line.size()) {
       std::string prefix = line.substr(0, cursor_pos);
 
@@ -343,7 +363,7 @@ Canvas::get_text_dimensions(const std::string &text, int size) {
   }
 
   // If something of this size has never been used
-  int width = 0, height = 0;
+  int width = 0, height = size;
 
   for (size_t i = 0; i < text.size(); i++) {
     Character ch = m_characters[size][(int)text[i]];

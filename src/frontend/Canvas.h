@@ -38,7 +38,7 @@ public:
   void set_matrix_index(size_t index
   );    // TODO: should be private?
 
-  void text_box_init(int x, int y, int width, int height);
+  void text_box_init(int x, int y, int width, int height, int lines_scrolled = 0);
   void text_box_write_line(
     const std::string &text,
     int cursor_pos = INT_MAX,
@@ -50,7 +50,7 @@ public:
   bool text_box_is_finished() const;
   std::pair<int, int>
   get_text_dimensions(const std::string &text, int size);
-
+  std::vector<std::string> get_line_broken(const std::string& text, int size = 32);
 private:
   Window *m_ptr;
 
@@ -75,6 +75,7 @@ private:
   int m_text_box_x, m_text_box_y;
   int m_text_box_width, m_text_box_height;
   int m_text_box_offset_y;
+  int m_text_box_lines_skip;
 
   const int m_line_spacing = 8;
   const int m_horizontal_spacing = 8;
@@ -86,6 +87,7 @@ private:
 
 private:
   void init_text(int size);
+  void init_text_buffers();
   void init_geometry_buffers();
 
   friend class Window;

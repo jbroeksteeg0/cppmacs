@@ -223,5 +223,11 @@ int main() {
     cursor.move_right();
   });
 
+  window.add_key_combo("Ctrl e", [](Window *window, BufferCursor &cursor, Frame *frame){
+    frame->scroll_down();
+  });
+  window.add_key_combo("Ctrl y", [](Window *window, BufferCursor &cursor, Frame *frame){
+    frame->scroll_up();
+  });
   window.run();
 }
