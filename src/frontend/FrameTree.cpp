@@ -72,7 +72,7 @@ FrameTree::FrameTree(
   m_selected = m_root.get();
 }
 
-void FrameTree::create_frame_hsplit(Node *at, float split) {
+void FrameTree::create_frame_vsplit(Node *at, float split) {
   std::shared_ptr<Buffer> original_buffer =
     at->frame->m_buffer;
   // Stores whether the current selected node has to change
@@ -91,7 +91,7 @@ void FrameTree::create_frame_hsplit(Node *at, float split) {
   }
 }
 
-void FrameTree::create_frame_vsplit(Node *at, float split) {
+void FrameTree::create_frame_hsplit(Node *at, float split) {
   std::shared_ptr<Buffer> original_buffer =
     at->frame->m_buffer;
   // Stores whether the current selected node has to change

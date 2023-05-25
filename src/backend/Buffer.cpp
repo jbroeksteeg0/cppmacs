@@ -88,6 +88,7 @@ void Buffer::open_path(std::string file_path) {
     return;
   }
 
+
   // Resolve dots etc
   path = std::filesystem::canonical(path);
 

@@ -1,4 +1,5 @@
 #include "BufferManager.h"
+#include <filesystem>
 
 BufferManager::BufferManager(Window *window)
     : m_window(window) {
@@ -22,6 +23,13 @@ BufferManager::get_files_buffer(std::string file_name) {
         return buffer;
       }
     }
+  }
+
+  auto path = std::filesystem::path(file_name);
+  auto directory = path.parent_path();
+
+  if (!std::filesystem::exists(directory)) {
+    return m_scratch_buffer;
   }
 
   // Create the thing if it does not exist
