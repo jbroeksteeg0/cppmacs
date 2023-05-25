@@ -252,7 +252,7 @@ void Canvas::text_box_init(int x, int y, int width, int height) {
 
   // offset = height - max(height of characters)
   std::string all_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  m_text_box_offset_y = height;
+  m_text_box_offset_y = y+height;
 }
 
 void Canvas::text_box_write_line(
@@ -294,6 +294,8 @@ void Canvas::text_box_write_line(
     m_text_box_offset_y -=
       get_text_dimensions(all_chars, size).second + m_line_spacing;
 
+    if (m_text_box_offset_y < m_text_box_y)
+      break;
     draw_text(line, m_text_box_x, m_text_box_offset_y, size, color);
     if (cursor_pos >= 0 && cursor_pos <= (int)line.size()) {
       std::string prefix = line.substr(0, cursor_pos);

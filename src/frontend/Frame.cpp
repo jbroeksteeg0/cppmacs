@@ -31,7 +31,7 @@ void Frame::draw() {
   draw_border(this == m_window->m_frame_tree->m_selected->frame.get());
 
   if (!m_buffer->is_minibuffer()) {
-    canvas->text_box_init(0, 28, m_width, m_height - 4);
+    canvas->text_box_init(0, 28, m_width, m_height-28);
     std::string file_text = m_buffer->m_file.has_value()
                               ? m_buffer->m_file->string()
                               : "Scratch Buffer";
