@@ -20,6 +20,11 @@ void __FRAMETREE_IMPL::Node::update_frame_geometry(
     frame->m_y = (int)y;
     frame->m_width = (int)width;
     frame->m_height = (int)height;
+
+    this->x = (int)x;
+    this->y = (int)y;
+    this->width = (int)width;
+    this->height = (int)height;
   } else if (type == __FRAMETREE_IMPL::Type::HSPLIT) {
     float left_width = width * split;
     left->update_frame_geometry(x, y, left_width, height);
@@ -58,8 +63,6 @@ void FrameTree::update_frame_geometry(
 ) {
   m_root->update_frame_geometry(x, y, width, height);
 }
-
-
 
 FrameTree::FrameTree(
   Window *parent, std::unique_ptr<Frame> root_frame

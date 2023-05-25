@@ -39,7 +39,6 @@ struct Node {
 
   void draw_and_recurse();
   void get_all_leaves(std::vector<Node*>& output);
-  void update_dimensions(int x, int y, int width, int height);
 
   friend class FrameTree;
 };
